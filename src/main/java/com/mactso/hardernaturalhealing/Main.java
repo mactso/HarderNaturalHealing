@@ -2,6 +2,9 @@ package com.mactso.hardernaturalhealing;
 
 
 import com.mactso.hardernaturalhealing.config.MyConfig;
+import com.mactso.hardernaturalhealing.events.PlayerTickHandler;
+import com.mactso.hardernaturalhealing.events.PlayerWakeupEventHandler;
+import com.mactso.hardernaturalhealing.events.TurnOffNormalHealingHandler;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,15 +29,21 @@ public class Main {
 
 
 		@SubscribeEvent 
-		public void preInit (final FMLCommonSetupEvent event) {
+		public static void preInit (final FMLCommonSetupEvent event) {
 				System.out.println("hardernaturalhealing: Registering Handler");
-				MinecraftForge.EVENT_BUS.register(new playerTickHandler());
+				MinecraftForge.EVENT_BUS.register(new PlayerTickHandler());
+				MinecraftForge.EVENT_BUS.register(new PlayerWakeupEventHandler());
+
 		}   
-		
-		@SubscribeEvent 
-		public void preInit (final FMLServerStartingEvent event) {
-				System.out.println("hardernaturalhealing: Turn normal healing Off");
-				MinecraftForge.EVENT_BUS.register(new turnNormalHealingOff());
-	} 
+	    @Mod.EventBusSubscriber()
+	    public static class ForgeEvents
+	    {
+			@SubscribeEvent 
+			public static void preInit (final FMLServerStartingEvent event) {
+					System.out.println("hardernaturalhealing: Turn normal healing Off");
+					MinecraftForge.EVENT_BUS.register(new TurnOffNormalHealingHandler());	
+		} 
+
+	    }		
 
 }
