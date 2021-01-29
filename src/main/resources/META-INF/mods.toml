@@ -4,9 +4,9 @@ license="MIT License"
 [[mods]]
 modId="hardernaturalhealing"
 version="${file.jarVersion}"
-displayName="Harder Spawners Mod"
+displayName="Harder Natural Healing Mod"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/harder-spawners"
-updateJSONURL="https://github.com/mactso/HarderSpawners/raw/master/update.json"
+updateJSONURL="https://github.com/mactso/HarderNaturalhealing/raw/master/update.json"
 logoFile="Logo.png"
 authors="MacTso, Lupicus"
 description='Harder Natural Healing Mod.'

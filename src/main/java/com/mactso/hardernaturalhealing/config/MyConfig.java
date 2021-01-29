@@ -50,9 +50,21 @@ public class MyConfig {
 	public static double getWakeupHealingAmount() {
 		return wakeupHealingAmount;
 	}
+	
+	public static int getAttackHealingDelayTicks() {
+		return attackHealingDelayTicks;
+	}
+	
+	public static double getMaxBonusHitPointTotems() {
+		return maxBonusHitPointTotems;
+	}	
+
+
 
 	public static int debugLevel;
 	private static double healingPerSecond;
+	private static double maxBonusHitPointTotems;
+	private static int attackHealingDelayTicks;
 	private static double minimumFoodHealingLevel;
 	private static double healingExhaustionCost;
 	private static double wakeupHealingAmount;
@@ -74,6 +86,8 @@ public class MyConfig {
 	public static void bakeConfig() {
 
 		debugLevel = COMMON.debugLevel.get();
+		attackHealingDelayTicks = COMMON.attackHealingDelayTicks.get();
+		maxBonusHitPointTotems = COMMON.maxBonusHitPointTotems.get();
 		healingPerSecond = COMMON.healingPerSecond.get();
 		minimumFoodHealingLevel = COMMON.minimumFoodHealingLevel.get();
 		healingExhaustionCost = COMMON.healingExhaustionCost.get();
@@ -86,6 +100,8 @@ public class MyConfig {
 	public static class Common {
 
 		public final IntValue debugLevel;
+		public final IntValue attackHealingDelayTicks;
+		public final IntValue maxBonusHitPointTotems;
 		public final DoubleValue healingPerSecond;
 		public final DoubleValue minimumFoodHealingLevel;
 		public final DoubleValue healingExhaustionCost;
@@ -95,8 +111,18 @@ public class MyConfig {
 			builder.push("Harder Natural Healing Control Values");
 
 			debugLevel = builder.comment("Debug Level: 0 = Off, 1 = Log, 2 = Chat+Log")
-					.translation(Main.MODID + ".config." + "debugLevel").defineInRange("debugLevel", () -> 0, 0, 2);
+					.translation(Main.MODID + ".config." + "debugLevel")
+					.defineInRange("debugLevel", () -> 0, 0, 2);
 
+			attackHealingDelayTicks = builder.comment("Attack Healing Delay in Ticks")
+					.translation(Main.MODID + ".config." + "attackHealingDelayTicks")
+					.defineInRange("attackHealingDelayTicks", () -> 200, 0, 3600);
+
+			maxBonusHitPointTotems = builder.comment("Max Bonus HitPoint Totems")
+					.translation(Main.MODID + ".config." + "maxBonusHitPointTotems")
+					.defineInRange("maxBonusHitPointTotems", () -> 300, 0, 1200);
+
+			
 			healingPerSecond = builder.comment("healingPerSecond")
 					.translation(Main.MODID + ".config." + "healingPerSecond")
 					.defineInRange("healingPerSecond", () -> 0.25, 0.0, 10.0);
