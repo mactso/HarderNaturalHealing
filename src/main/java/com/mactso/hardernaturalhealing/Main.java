@@ -1,16 +1,12 @@
 package com.mactso.hardernaturalhealing;
 
 import com.mactso.hardernaturalhealing.config.MyConfig;
-import com.mactso.hardernaturalhealing.events.PlayerTickHandler;
-import com.mactso.hardernaturalhealing.events.PlayerWakeupEventHandler;
-import com.mactso.hardernaturalhealing.events.TurnOffNormalHealingHandler;
 
 import net.minecraft.world.GameRules;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -29,8 +25,9 @@ public class Main {
 	@SubscribeEvent
 	public static void preInit(final FMLCommonSetupEvent event) {
 		System.out.println("hardernaturalhealing: Registering Handler");
-		MinecraftForge.EVENT_BUS.register(new PlayerTickHandler());
-		MinecraftForge.EVENT_BUS.register(new PlayerWakeupEventHandler());
+// remove these redundant registrations (since using @Mod.EventBusSubscriber() now);
+//		MinecraftForge.EVENT_BUS.register(new PlayerTickHandler());
+//		MinecraftForge.EVENT_BUS.register(new PlayerWakeupEventHandler());
 
 	}
 

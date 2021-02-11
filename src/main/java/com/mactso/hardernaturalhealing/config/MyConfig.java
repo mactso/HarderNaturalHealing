@@ -12,6 +12,8 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -68,6 +70,16 @@ public class MyConfig {
 	private static double minimumFoodHealingLevel;
 	private static double healingExhaustionCost;
 	private static double wakeupHealingAmount;
+	private static double minimumStarvationHealth;
+	private static boolean peacefulHunger;
+	
+	public static double getMinimumStarvationHealth() {
+		return minimumStarvationHealth;
+	}
+
+	public static boolean isPeacefulHunger() {
+		return peacefulHunger;
+	}
 
 	@SubscribeEvent
 	public static void onModConfigEvent(final ModConfig.ModConfigEvent configEvent) {
@@ -92,6 +104,8 @@ public class MyConfig {
 		minimumFoodHealingLevel = COMMON.minimumFoodHealingLevel.get();
 		healingExhaustionCost = COMMON.healingExhaustionCost.get();
 		wakeupHealingAmount = COMMON.wakeupHealingAmount.get();
+		minimumStarvationHealth = COMMON.minimumStarvationHealth.get();
+		peacefulHunger = COMMON.peacefulHunger.get();
 		if (debugLevel > 0) {
 			System.out.println("HarderNaturalHealing Debug: " + debugLevel);
 		}
@@ -106,6 +120,8 @@ public class MyConfig {
 		public final DoubleValue minimumFoodHealingLevel;
 		public final DoubleValue healingExhaustionCost;
 		public final DoubleValue wakeupHealingAmount;
+		public final IntValue minimumStarvationHealth;
+		public final BooleanValue peacefulHunger;
 
 		public Common(ForgeConfigSpec.Builder builder) {
 			builder.push("Harder Natural Healing Control Values");
@@ -139,6 +155,15 @@ public class MyConfig {
 					.translation(Main.MODID + ".config." + "wakeupHealingAmount")
 					.defineInRange("wakeupHealingAmount", () -> 4.0, 0.0, 10.0);
 
+			minimumStarvationHealth = builder.comment("minimum hit points for peaceful mode starvation.")
+					.translation(Main.MODID + ".config." + "minimumStarvationHealth")
+					.defineInRange("minimumStarvationHealth", () -> 0, 0 , 20);
+
+			peacefulHunger = builder
+					.comment("Can the player get hungry and maybe even starve to death in peaceful mode.")
+					.translation(Main.MODID + ".config." + "peacefulHunger")
+					.define("peacefulHunger", false);
+			
 			builder.pop();
 		}
 	}
