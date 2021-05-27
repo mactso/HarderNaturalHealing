@@ -36,48 +36,36 @@ public class PeacefulHealingHandler {
 			FoodStats fs = event.player.getFoodStats();
 			Difficulty difficulty = event.player.world.getDifficulty();
 			boolean secondTimer = (0 == event.player.world.getGameTime() % 20);
-
+			int secondTimerint = (int) event.player.world.getGameTime() % 20;
 			if (event.phase == TickEvent.Phase.START) {
+				MyConfig.setDebugLevel(0);
 				if (event.side == LogicalSide.CLIENT) {
 					cRegen = event.player.world.getGameRules().getBoolean(GameRules.NATURAL_REGENERATION);
 					cSat = fs.foodSaturationLevel;
 					cExt = fs.foodExhaustionLevel;
 					cFod = fs.foodLevel;
 					cTim = fs.foodTimer;
+					MyConfig.debugMsg(2, "(" + event.player.ticksExisted + ") C START cTim:" + cTim + " cSat:" + cSat + " cExt:" + cExt + " cFod:" + cFod + ".");
 				} else {
 					sRegen = event.player.world.getGameRules().getBoolean(GameRules.NATURAL_REGENERATION);
 					sSat = fs.foodSaturationLevel;
 					sExt = fs.foodExhaustionLevel;
 					sFod = fs.foodLevel;
 					sTim = fs.foodTimer;
+					MyConfig.debugMsg(2, "(" + event.player.ticksExisted + ") S START sTim:" + sTim + " sSat:" + sSat + " sExt:" + sExt + " sFod:" + sFod + ".");
 				}
-				if (secondTimer) {
-					if (MyConfig.getDebugLevel() > 1) {
-						System.out
-						.println("START cTim:" + cTim + " cSat:" + cSat + " cExt:" + cExt + " cFod:" + cFod + ".");
-						System.out
-						.println("START sTim:" + sTim + " sSat:" + sSat + " sExt:" + sExt + " sFod:" + sFod + ".");
-						System.out.println("cRegen:" + cRegen + " sRegen:" + sRegen);
-					}
-				}
+				MyConfig.setDebugLevel(0);
 			}
 
 			if (event.phase == TickEvent.Phase.END) {
 				if (difficulty == Difficulty.PEACEFUL) {
+					MyConfig.setDebugLevel(2);
 					if (event.side == LogicalSide.CLIENT) {
+						MyConfig.debugMsg(2, "(" + event.player.ticksExisted + ") C xENDx cTim:" + cTim + " cSat:" + cSat + " cExt:" + cExt + " cFod:" + cFod + ".");
 						fs.foodLevel = cFod;
-						if ((cExt > fs.foodExhaustionLevel) && (cSat == 0) && (fs.foodLevel > 0)) {
-							fs.foodLevel -= 1;
-						}
-						if (fs.foodLevel == 0) {
-							if (++cTim > 80) {
-								event.player.attackEntityFrom(DamageSource.STARVE, 1.0F);
-								cTim = 0;
-							}
-						}
-						fs.foodTimer = cTim;
 					} else {
-						fs.foodLevel = sFod;
+						MyConfig.debugMsg(2, "(" + event.player.ticksExisted + ") S xENDx sTim:" + sTim + " sSat:" + sSat + " sExt:" + sExt + " sFod:" + sFod + ".");
+//						fs.foodLevel = sFod;
 						if ((sExt > fs.foodExhaustionLevel) && (sSat == 0) && (fs.foodLevel > 0)) {
 							fs.foodLevel -= 1;
 						}
@@ -92,13 +80,7 @@ public class PeacefulHealingHandler {
 						fs.foodTimer = sTim;
 					}
 				}
-				if (secondTimer) {
-					if (MyConfig.getDebugLevel() > 1) {
-						System.out.println("END cTim:" + cTim + " cSat:" + cSat + " cExt:" + cExt + " cFod:" + cFod + ".");
-						System.out.println("END sTim:" + sTim + " sSat:" + sSat + " sExt:" + sExt + " sFod:" + sFod + ".");
-						System.out.println("cRegen:" + cRegen + " sRegen:" + sRegen);
-					}
-				}
+				MyConfig.setDebugLevel(0);
 
 			}
 

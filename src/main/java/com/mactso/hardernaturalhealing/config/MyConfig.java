@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import com.mactso.hardernaturalhealing.Main;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -61,7 +62,17 @@ public class MyConfig {
 		return maxBonusHitPointTotems;
 	}	
 
+	public static void debugMsg (int level, String dMsg) {
+		if (debugLevel > level-1) {
+			System.out.println("L"+level + ":" + dMsg);
+		}
+	}
 
+	public static void debugMsg (int level, BlockPos pos, String dMsg) {
+		if (debugLevel > level-1) {
+			System.out.println("L"+level+" ("+pos.getX()+","+pos.getY()+","+pos.getZ()+"): " + dMsg);
+		}
+	}
 
 	public static int debugLevel;
 	private static double healingPerSecond;
@@ -72,7 +83,12 @@ public class MyConfig {
 	private static double wakeupHealingAmount;
 	private static double minimumStarvationHealth;
 	private static boolean peacefulHunger;
+	private static double extraExhaustionWhenHurt;
 	
+	public static double getExtraExhaustionWhenHurt() {
+		return extraExhaustionWhenHurt;
+	}
+
 	public static double getMinimumStarvationHealth() {
 		return minimumStarvationHealth;
 	}
@@ -99,6 +115,7 @@ public class MyConfig {
 
 		debugLevel = COMMON.debugLevel.get();
 		attackHealingDelayTicks = COMMON.attackHealingDelayTicks.get();
+		extraExhaustionWhenHurt = COMMON.extraExhaustionWhenHurt.get();
 		maxBonusHitPointTotems = COMMON.maxBonusHitPointTotems.get();
 		healingPerSecond = COMMON.healingPerSecond.get();
 		minimumFoodHealingLevel = COMMON.minimumFoodHealingLevel.get();
@@ -116,6 +133,7 @@ public class MyConfig {
 		public final IntValue debugLevel;
 		public final IntValue attackHealingDelayTicks;
 		public final IntValue maxBonusHitPointTotems;
+		public final DoubleValue extraExhaustionWhenHurt;
 		public final DoubleValue healingPerSecond;
 		public final DoubleValue minimumFoodHealingLevel;
 		public final DoubleValue healingExhaustionCost;
@@ -154,7 +172,11 @@ public class MyConfig {
 			wakeupHealingAmount = builder.comment("wakeupHealingAmount")
 					.translation(Main.MODID + ".config." + "wakeupHealingAmount")
 					.defineInRange("wakeupHealingAmount", () -> 4.0, 0.0, 10.0);
-
+			
+			extraExhaustionWhenHurt = builder.comment("extraExhaustionWhenHurt")
+					.translation(Main.MODID + ".config." + "extraExhaustionWhenHurt")
+					.defineInRange("extraExhaustionWhenHurt", () -> 0.0125, 0.0, 1.0);
+					
 			minimumStarvationHealth = builder.comment("minimum hit points for peaceful mode starvation.")
 					.translation(Main.MODID + ".config." + "minimumStarvationHealth")
 					.defineInRange("minimumStarvationHealth", () -> 0, 0 , 20);
@@ -162,7 +184,7 @@ public class MyConfig {
 			peacefulHunger = builder
 					.comment("Can the player get hungry and maybe even starve to death in peaceful mode.")
 					.translation(Main.MODID + ".config." + "peacefulHunger")
-					.define("peacefulHunger", false);
+					.define("peacefulHunger", true);
 			
 			builder.pop();
 		}
