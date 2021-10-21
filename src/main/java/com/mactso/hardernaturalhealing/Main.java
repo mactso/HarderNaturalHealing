@@ -2,14 +2,16 @@ package com.mactso.hardernaturalhealing;
 
 import com.mactso.hardernaturalhealing.config.MyConfig;
 
-import net.minecraft.world.GameRules;
+import net.minecraft.world.level.GameRules;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
+
 
 @Mod("hardernaturalhealing")
 public class Main {
@@ -36,7 +38,7 @@ public class Main {
 		@SubscribeEvent
 		public static void preInit(final FMLServerStartingEvent event) {
 			System.out.println("hardernaturalhealing: Turn normal healing Off");
-			((GameRules.BooleanValue) event.getServer().getGameRules().get(GameRules.NATURAL_REGENERATION)).set(false,
+			((GameRules.BooleanValue) event.getServer().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION)).set(false,
 					event.getServer());
 		}
 
