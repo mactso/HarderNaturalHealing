@@ -10,6 +10,6 @@ public class OnItemUseFinishHandler {
 		@SubscribeEvent
 		public static void onPlayerWakeUp(LivingEntityUseItemEvent.Finish event) {
 
-			System.out.println("item use finish");
+//			System.out.println("item use finish");
 		}
 	}
