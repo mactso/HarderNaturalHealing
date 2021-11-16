@@ -59,7 +59,7 @@ public class PeacefulHealingHandler {
 
 			if (event.phase == TickEvent.Phase.END) {
 				if (difficulty == Difficulty.PEACEFUL) {
-					MyConfig.setDebugLevel(2);
+					MyConfig.setDebugLevel(0);
 					if (event.side == LogicalSide.CLIENT) {
 						MyConfig.debugMsg(2, "(" + event.player.ticksExisted + ") C xENDx cTim:" + cTim + " cSat:" + cSat + " cExt:" + cExt + " cFod:" + cFod + ".");
 						fs.foodLevel = cFod;
