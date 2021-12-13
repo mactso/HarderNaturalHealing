@@ -34,8 +34,8 @@ public class PeacefulHealingHandler {
 		if (MyConfig.isPeacefulHunger()) {
 			FoodData fs = event.player.getFoodData();
 			Difficulty difficulty = event.player.level.getDifficulty();
-			boolean secondTimer = (0 == event.player.level.getGameTime() % 20);
-			int secondTimerint = (int) event.player.level.getGameTime() % 20;
+//			boolean secondTimer = (0 == event.player.level.getGameTime() % 20);
+//			int secondTimerint = (int) event.player.level.getGameTime() % 20;
 			if (event.phase == TickEvent.Phase.START) {
 				MyConfig.setDebugLevel(0);
 				if (event.side == LogicalSide.CLIENT) {

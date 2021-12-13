@@ -7,6 +7,10 @@ import org.apache.logging.log4j.Logger;
 import com.mactso.hardernaturalhealing.Main;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+
 
 //import net.minecraft.world.entity.player.Player;
 
@@ -29,6 +33,44 @@ public class MyConfig {
 		final Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
 		COMMON_SPEC = specPair.getRight();
 		COMMON = specPair.getLeft();
+	}
+
+	public static void setHealingPerSecond(double healingPerSecond) {
+		MyConfig.healingPerSecond = healingPerSecond;
+	}
+
+	public static void setMaxBonusHitPointTotems(double maxBonusHitPointTotems) {
+		MyConfig.maxBonusHitPointTotems = maxBonusHitPointTotems;
+	}
+
+	public static void setAttackHealingDelayTicks(int attackHealingDelayTicks) {
+		MyConfig.attackHealingDelayTicks = attackHealingDelayTicks;
+	}
+
+	public static void setMinimumFoodHealingLevel(double minimumFoodHealingLevel) {
+		MyConfig.minimumFoodHealingLevel = minimumFoodHealingLevel;
+	}
+
+	public static boolean setHealingExhaustionCost(double healingExhaustionCost) {
+		MyConfig.healingExhaustionCost = healingExhaustionCost;
+		return true;
+	}
+
+	public static void setWakeupHealingAmount(double wakeupHealingAmount) {
+		MyConfig.wakeupHealingAmount = wakeupHealingAmount;
+	}
+
+	public static void setMinimumStarvationHealth(double minimumStarvationHealth) {
+		MyConfig.minimumStarvationHealth = minimumStarvationHealth;
+	}
+
+	public static int setPeacefulHunger(boolean peacefulHunger) {
+		MyConfig.peacefulHunger = peacefulHunger;
+		return 1; // TODO ask lupin about this.
+	}
+
+	public static void setExtraExhaustionWhenHurt(double extraExhaustionWhenHurt) {
+		MyConfig.extraExhaustionWhenHurt = extraExhaustionWhenHurt;
 	}
 
 	public static int getDebugLevel() {
@@ -191,21 +233,52 @@ public class MyConfig {
 		}
 	}
 
-//	// support for any color chattext
-//	public static void sendChat(PlayerEntity p, String chatMessage, Color textColor) {
-//		StringTextComponent component = new StringTextComponent (chatMessage);
-//		component.getStyle().withColor(textColor);
-//		p.sendMessage(component, p.getUUID());
-//	}
-//	
-//	// support for any color, optionally bold text.
-//	public static void sendBoldChat(PlayerEntity p, String chatMessage, Color textColor) {
-//		StringTextComponent component = new StringTextComponent (chatMessage);
-//
-//		component.getStyle().withBold(true);
-//		component.getStyle().withColor(textColor);
-//
-//		p.sendMessage(component, p.getUUID());
-//	}	
+
+	public static void sendBoldChat(ServerPlayer p, String chatMessage, TextColor textColor) {
+		TextComponent component = new TextComponent (chatMessage);
+
+		component.getStyle().withBold(true);
+		component.getStyle().withColor(textColor);
+
+		p.sendMessage(component, p.getUUID());
+	}	
+	
+	public static void sendChat(ServerPlayer p, String chatMessage, TextColor textColor) {
+		TextComponent component = new TextComponent (chatMessage);
+		component.getStyle().withColor(textColor);
+		p.sendMessage(component, p.getUUID());
+	}
+
+	// update config when changed by commands
+	public static void pushPeacefulHunger() {
+		COMMON.peacefulHunger.set(MyConfig.isPeacefulHunger());		
+	}
+
+	public static void pushHealingPerSecond() {
+		COMMON.healingPerSecond.set(MyConfig.getHealingPerSecond());			
+	}
+
+	public static void pushAttackHealingDelayTicks() {
+		COMMON.attackHealingDelayTicks.set(MyConfig.getAttackHealingDelayTicks());			
+	}
+
+	public static void pushMinimumFoodHealingLevel() {
+		COMMON.minimumFoodHealingLevel.set(MyConfig.getMinimumFoodHealingLevel());			
+	}
+
+	public static void pushHealingExhaustionCost() {
+		COMMON.healingExhaustionCost.set(MyConfig.getHealingExhaustionCost());			
+	}
+	
+	public static void pushWakeupHealingAmount() {
+		COMMON.wakeupHealingAmount.set(MyConfig.getWakeupHealingAmount());			
+		
+	}
+	public static void pushExtraExhaustionWhenHurt() {
+		COMMON.extraExhaustionWhenHurt.set(MyConfig.getExtraExhaustionWhenHurt());			
+		
+	}
+
+
 	
 }

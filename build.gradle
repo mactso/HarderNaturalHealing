@@ -18,7 +18,7 @@ version = "${mc_version}-${mod_version}"
 group = 'com.mactso.hardernaturalhealing' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'HarderNaturalHealing'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.

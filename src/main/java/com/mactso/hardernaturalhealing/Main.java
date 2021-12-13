@@ -1,16 +1,18 @@
 package com.mactso.hardernaturalhealing;
 
 import com.mactso.hardernaturalhealing.config.MyConfig;
+import com.mactso.hardernaturalhealing.config.commands.HarderNaturalHealingCommands;
 
 import net.minecraft.world.level.GameRules;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
+
 
 
 @Mod("hardernaturalhealing")
@@ -36,12 +38,18 @@ public class Main {
 	@Mod.EventBusSubscriber()
 	public static class ForgeEvents {
 		@SubscribeEvent
-		public static void preInit(final FMLServerStartingEvent event) {
+		public static void preInit(final ServerStartingEvent event) {
 			System.out.println("hardernaturalhealing: Turn normal healing Off");
 			((GameRules.BooleanValue) event.getServer().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION)).set(false,
 					event.getServer());
 		}
 
+		@SubscribeEvent 		
+		public static void onCommandsRegistry(final RegisterCommandsEvent event) {
+			System.out.println("Happy Trails: Registering Command Dispatcher");
+			HarderNaturalHealingCommands.register(event.getDispatcher());			
+		}
 	}
+	
 
 }
