@@ -2,6 +2,7 @@ package com.mactso.hardernaturalhealing.config.commands;
 
 import com.mactso.hardernaturalhealing.config.MyConfig;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 
 import net.minecraft.ChatFormatting;
@@ -17,7 +18,7 @@ public class HarderNaturalHealingCommands {
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(Commands.literal("hardernaturalhealing")
-				.then(Commands.literal("showSettings").executes(ctx -> {
+				.then(Commands.literal("0-ShowSettings").executes(ctx -> {
 					ServerPlayer p = ctx.getSource().getPlayerOrException();
 					showSettings(p);
 							return 1;
@@ -29,7 +30,7 @@ public class HarderNaturalHealingCommands {
 				return source.hasPermission(2);
 			}
 		)
-		.then(Commands.literal("newSetting").then(
+		.then(Commands.literal("1-NewSetting").then(
 				Commands.argument("newSetting", IntegerArgumentType.integer(1,5)).executes(ctx -> {
 					ServerPlayer p = ctx.getSource().getPlayerOrException();
 					return setNewSetting(p, IntegerArgumentType.getInteger(ctx, "newSetting"));
@@ -37,7 +38,7 @@ public class HarderNaturalHealingCommands {
 			)
 			)
 			)
-		.then(Commands.literal("peacefulHunger").then(
+		.then(Commands.literal("1-PeacefulHunger").then(
 				Commands.literal("true").executes(ctx -> {
 					return MyConfig.setPeacefulHunger(true);
 				}
@@ -48,11 +49,62 @@ public class HarderNaturalHealingCommands {
 			)
 			)
 			)
-		
+		.then(Commands.literal("1-MinimumStarvationHealth").then(
+				Commands.argument("minimumStarvationHealth", IntegerArgumentType.integer(0,20)).executes(ctx -> {
+					return setMinimumStarvationHealth(IntegerArgumentType.getInteger(ctx, "minimumStarvationHealth"));
+			}
+			)
+			)
+			)
+		.then(Commands.literal("2-healingPerSecond").then(
+				Commands.argument("healingPerSecond", DoubleArgumentType.doubleArg(0.25,10.0)).executes(ctx -> {
+					return setHealingPerSecond(DoubleArgumentType.getDouble(ctx, "healingPerSecond"));
+			}
+			)
+			)
+			)
+		.then(Commands.literal("2-attackHealingDelayTicks").then(
+				Commands.argument("attackHealingDelayTicks", IntegerArgumentType.integer(0,3000)).executes(ctx -> {
+					ServerPlayer p = ctx.getSource().getPlayerOrException();
+					return setAttackHealingDelayTicks(IntegerArgumentType.getInteger(ctx, "attackHealingDelayTicks"));
+			}
+			)
+			)
+			)		
+		.then(Commands.literal("2-getMinimumFoodHealingLevel").then(
+				Commands.argument("getMinimumFoodHealingLevel", DoubleArgumentType.doubleArg(0.0,22.0)).executes(ctx -> {
+					return setMinimumFoodHealingLevel(DoubleArgumentType.getDouble(ctx, "getMinimumFoodHealingLevel"));
+			}
+			)
+			)
+			)
+		.then(Commands.literal("2-healingExhaustionCost").then(
+				Commands.argument("healingExhaustionCost", DoubleArgumentType.doubleArg(0.0,10.0)).executes(ctx -> {
+					return setHealingExhaustionCost(DoubleArgumentType.getDouble(ctx, "healingExhaustionCost"));
+			}
+			)
+			)
+			)	
+		.then(Commands.literal("2-wakeupHealingAmount").then(
+				Commands.argument("wakeupHealingAmount", DoubleArgumentType.doubleArg(0.0,10.0)).executes(ctx -> {
+					return setWakeupHealingAmount(DoubleArgumentType.getDouble(ctx, "wakeupHealingAmount"));
+			}
+			)
+			)
+			)
+		.then(Commands.literal("2-extraExhaustionWhenHurt").then(
+				Commands.argument("extraExhaustionWhenHurt", DoubleArgumentType.doubleArg(0.0,1.0)).executes(ctx -> {
+					return setExtraExhaustionWhenHurt(DoubleArgumentType.getDouble(ctx, "extraExhaustionWhenHurt"));
+			}
+			)
+			)
+			)	
 		);
 		
 
 	}
+
+
 
 	private static void showNewSetup (ServerPlayer p, int i) {
 		String[] setupNames = new String[] {"easy", "normal", "harder", "superhard", "wakeup"};
@@ -106,9 +158,52 @@ public class HarderNaturalHealingCommands {
 		
 	}	
 	
+	public static int setHealingPerSecond (double newValue) {
+		MyConfig.setHealingPerSecond(newValue);
+		MyConfig.pushHealingPerSecond();
+		return 1;
+	}
+
+	public static int setAttackHealingDelayTicks (double newValue) {
+	MyConfig.setAttackHealingDelayTicks((int)newValue); 
+	MyConfig.pushAttackHealingDelayTicks(); 
+	return 1;
+	}
+
+	public static int setMinimumFoodHealingLevel (double newValue) {
+	MyConfig.setMinimumFoodHealingLevel(newValue);
+	MyConfig.pushMinimumFoodHealingLevel(); 
+	return 1;
+	}
+
+	public static int setHealingExhaustionCost (double newValue) {
+	MyConfig.setHealingExhaustionCost(newValue); 
+	MyConfig.pushHealingExhaustionCost(); 
+	return 1;
+	}
+
+	public static int setWakeupHealingAmount (double newValue) {
+	MyConfig.setWakeupHealingAmount(newValue);
+	MyConfig.pushWakeupHealingAmount();
+	return 1;
+	}
+
+	public static int setExtraExhaustionWhenHurt (double d) {
+	MyConfig.setExtraExhaustionWhenHurt(d);
+	MyConfig.pushExtraExhaustionWhenHurt();
+	return 1;
+	}
+
 	public static int setPeacefulHunger (boolean newValue) {
 		MyConfig.setPeacefulHunger(newValue);
 		MyConfig.pushPeacefulHunger();
 		return 1;
 	}	
+
+	private static int setMinimumStarvationHealth( int newValue) {
+		MyConfig.setMinimumStarvationHealth(newValue);
+		MyConfig.pushMinimumStarvationHealth();
+		return 0;
+	}
+
 }

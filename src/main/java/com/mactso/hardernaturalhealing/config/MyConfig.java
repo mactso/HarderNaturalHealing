@@ -60,7 +60,7 @@ public class MyConfig {
 		MyConfig.wakeupHealingAmount = wakeupHealingAmount;
 	}
 
-	public static void setMinimumStarvationHealth(double minimumStarvationHealth) {
+	public static void setMinimumStarvationHealth(int minimumStarvationHealth) {
 		MyConfig.minimumStarvationHealth = minimumStarvationHealth;
 	}
 
@@ -124,7 +124,7 @@ public class MyConfig {
 	private static double minimumFoodHealingLevel;
 	private static double healingExhaustionCost;
 	private static double wakeupHealingAmount;
-	private static double minimumStarvationHealth;
+	private static int minimumStarvationHealth;
 	private static boolean peacefulHunger;
 	private static double extraExhaustionWhenHurt;
 	
@@ -132,7 +132,7 @@ public class MyConfig {
 		return extraExhaustionWhenHurt;
 	}
 
-	public static double getMinimumStarvationHealth() {
+	public static int getMinimumStarvationHealth() {
 		return minimumStarvationHealth;
 	}
 
@@ -277,6 +277,10 @@ public class MyConfig {
 	public static void pushExtraExhaustionWhenHurt() {
 		COMMON.extraExhaustionWhenHurt.set(MyConfig.getExtraExhaustionWhenHurt());			
 		
+	}
+
+	public static void pushMinimumStarvationHealth() {
+		COMMON.minimumStarvationHealth.set(MyConfig.getMinimumStarvationHealth());			
 	}
 
 
