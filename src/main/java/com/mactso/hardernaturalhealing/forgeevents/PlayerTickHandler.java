@@ -30,10 +30,12 @@ public class PlayerTickHandler {
 				return;
 			}
 
-			// if player is hurt, then use optional extra exhaustion
-			if (event.player.getHealth() < event.player.getMaxHealth()) {
-				event.player.getFoodData().addExhaustion((float) MyConfig.getExtraExhaustionWhenHurt());
-				MyConfig.debugMsg(1, "Adding " + MyConfig.getExtraExhaustionWhenHurt() + " Exhaustion");
+			// if player is hurt, then use optional extra exhaustion if non-zero.
+			if (MyConfig.getExtraExhaustionWhenHurt() > 0.0) {
+				if (event.player.getHealth() < event.player.getMaxHealth()) {
+					event.player.getFoodData().addExhaustion((float) MyConfig.getExtraExhaustionWhenHurt());
+					MyConfig.debugMsg(1, "Adding " + MyConfig.getExtraExhaustionWhenHurt() + " Exhaustion");
+				}
 			}
 
 			// block healing for 0 to 3600 ticks after player attacks.
@@ -57,9 +59,11 @@ public class PlayerTickHandler {
 			}
 
 			// heal player at the start of the tick if they qualify for healing.
-			MyConfig.debugMsg(1, "HarderNormalHealing: Healing Player " + MyConfig.getHealingPerSecond() + " hitpoints.");
-			event.player.heal((float) MyConfig.getHealingPerSecond());
-			event.player.getFoodData().addExhaustion((float) (MyConfig.getHealingExhaustionCost()));
+			if (MyConfig.getHealingPerSecond() > 0.0) {
+				MyConfig.debugMsg(1, "HarderNormalHealing: Healing Player " + MyConfig.getHealingPerSecond() + " hitpoints.");
+				event.player.heal((float) MyConfig.getHealingPerSecond());
+				event.player.getFoodData().addExhaustion((float) (MyConfig.getHealingExhaustionCost()));
+			}
 
 		}
 

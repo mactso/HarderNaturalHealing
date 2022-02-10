@@ -8,13 +8,15 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber()
-public class PlayerWakeupEventHandler {
-
+public class WakeUpEvents {
 	@SubscribeEvent
 	public static void onPlayerWakeUp(PlayerWakeUpEvent event) {
-        if (!event.getEntityLiving().level.isClientSide && !event.wakeImmediately() && !event.updateWorld()) {
-			event.getPlayer().heal((float) MyConfig.getWakeupHealingAmount());
-			System.out.println("new day");
-        }
+
+		if (event.getPlayer().level instanceof ServerLevel sl) {
+			long debug = sl.getDayTime()%24000;
+			if (sl.getDayTime() % 24000 < 40) {
+				event.getPlayer().heal((float) MyConfig.getWakeupHealingAmount());
+			}
+		}
 	}
 }
