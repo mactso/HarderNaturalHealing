@@ -1,8 +1,7 @@
 package com.mactso.hardernaturalhealing;
 
+import com.mactso.hardernaturalhealing.commands.HarderNaturalHealingCommands;
 import com.mactso.hardernaturalhealing.config.MyConfig;
-import com.mactso.hardernaturalhealing.config.commands.HarderNaturalHealingCommands;
-
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;

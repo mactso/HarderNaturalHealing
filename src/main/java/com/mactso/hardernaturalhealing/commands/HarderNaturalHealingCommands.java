@@ -1,6 +1,7 @@
-package com.mactso.hardernaturalhealing.config.commands;
+package com.mactso.hardernaturalhealing.commands;
 
 import com.mactso.hardernaturalhealing.config.MyConfig;
+import com.mactso.hardernaturalhealing.utility.Utility;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -9,7 +10,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.server.commands.FillCommand;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.event.entity.EntityTeleportEvent.TeleportCommand;
 
 public class HarderNaturalHealingCommands {
 	String subcommand = "";
@@ -17,6 +20,7 @@ public class HarderNaturalHealingCommands {
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
+
 		dispatcher.register(Commands.literal("hardernaturalhealing")
 				.then(Commands.literal("0-ShowSettings").executes(ctx -> {
 					ServerPlayer p = ctx.getSource().getPlayerOrException();
@@ -58,22 +62,21 @@ public class HarderNaturalHealingCommands {
 			)
 		.then(Commands.literal("2-healingPerSecond").then(
 				Commands.argument("healingPerSecond", DoubleArgumentType.doubleArg(0.25,10.0)).executes(ctx -> {
-					return setHealingPerSecond(DoubleArgumentType.getDouble(ctx, "healingPerSecond"));
+					return setHealingPerSecond(DoubleArgumentType.getDouble(ctx, "healingPerSecond 0.25 to 10.0"));
 			}
 			)
 			)
 			)
 		.then(Commands.literal("2-attackHealingDelayTicks").then(
 				Commands.argument("attackHealingDelayTicks", IntegerArgumentType.integer(0,3000)).executes(ctx -> {
-					ServerPlayer p = ctx.getSource().getPlayerOrException();
 					return setAttackHealingDelayTicks(IntegerArgumentType.getInteger(ctx, "attackHealingDelayTicks"));
 			}
 			)
 			)
 			)		
-		.then(Commands.literal("2-getMinimumFoodHealingLevel").then(
-				Commands.argument("getMinimumFoodHealingLevel", DoubleArgumentType.doubleArg(0.0,22.0)).executes(ctx -> {
-					return setMinimumFoodHealingLevel(DoubleArgumentType.getDouble(ctx, "getMinimumFoodHealingLevel"));
+		.then(Commands.literal("2-minimumFoodHealingLevel").then(
+				Commands.argument("minimumFoodHealingLevel", DoubleArgumentType.doubleArg(0.0,22.0)).executes(ctx -> {
+					return setMinimumFoodHealingLevel(DoubleArgumentType.getDouble(ctx, "minimumFoodHealingLevel"));
 			}
 			)
 			)
@@ -98,7 +101,14 @@ public class HarderNaturalHealingCommands {
 			}
 			)
 			)
-			)	
+			)
+		.then(Commands.literal("3-debugLevel").then(
+				Commands.argument("debugLevel", IntegerArgumentType.integer(0,2)).executes(ctx -> {
+					return setDebugLevel(IntegerArgumentType.getInteger(ctx, "debugLevel"));
+			}
+			)
+			)
+			)		
 		);
 		
 
@@ -110,25 +120,26 @@ public class HarderNaturalHealingCommands {
 		String[] setupNames = new String[] {"easy", "normal", "harder", "superhard", "wakeup"};
 		String chatMessage = 
 				"Setup: " + setupNames [i] ;
-        MyConfig.sendChat (p,chatMessage,TextColor.fromLegacyFormat(ChatFormatting.GREEN));
+        Utility.sendChat (p,chatMessage,TextColor.fromLegacyFormat(ChatFormatting.GREEN));
 
 	}
 	
 	private static void showSettings(ServerPlayer p) {
 		String chatMessage = 
 				"Current Settings";
-		MyConfig.sendBoldChat (p,chatMessage, TextColor.fromLegacyFormat(ChatFormatting.DARK_GREEN));
+		Utility.sendBoldChat (p,chatMessage, TextColor.fromLegacyFormat(ChatFormatting.DARK_GREEN));
 		chatMessage = 
-				" peaceful hunger.............:" + MyConfig.isPeacefulHunger() +
-			    "\n minimum starvation health.: " + MyConfig.getMinimumStarvationHealth() +
-			    "\n healingPerSecond..........:"+ MyConfig.getHealingPerSecond() +
-				"\n attackHealingDelayTicks...:" + MyConfig.getAttackHealingDelayTicks() +
-				"\n minimumFoodHealingLevel...:" + MyConfig.getMinimumFoodHealingLevel() +
-				"\n healingExhaustionCost.....:" + MyConfig.getHealingExhaustionCost() +
-				"\n wakeupHealingAmount.......:" + MyConfig.getWakeupHealingAmount() +
-				"\n extraExhaustionWhenHurt...:"+MyConfig.getExtraExhaustionWhenHurt();
+				" Debug Level...................................: " + MyConfig.getDebugLevel() +
+				"\n peaceful hunger........................: " + MyConfig.isPeacefulHunger() +
+			    "\n minimum starvation health...: " + MyConfig.getMinimumStarvationHealth() +
+			    "\n healingPerSecond.....................: "+ MyConfig.getHealingPerSecond() +
+				"\n attackHealingDelayTicks.......: " + MyConfig.getAttackHealingDelayTicks() +
+				"\n minimumFoodHealingLevel......: " + MyConfig.getMinimumFoodHealingLevel() +
+				"\n healingExhaustionCost..........: " + MyConfig.getHealingExhaustionCost() +
+				"\n wakeupHealingAmount..............: " + MyConfig.getWakeupHealingAmount() +
+				"\n extraExhaustionWhenHurt..: "+MyConfig.getExtraExhaustionWhenHurt();
 				
-		        MyConfig.sendChat (p,chatMessage,TextColor.fromLegacyFormat(ChatFormatting.GREEN));
+		        Utility.sendChat (p,chatMessage,TextColor.fromLegacyFormat(ChatFormatting.GREEN));
 	}
 
 	public static int setNewSetting(ServerPlayer p, int s) {
@@ -200,10 +211,17 @@ public class HarderNaturalHealingCommands {
 		return 1;
 	}	
 
-	private static int setMinimumStarvationHealth( int newValue) {
+	public static int setMinimumStarvationHealth( int newValue) {
 		MyConfig.setMinimumStarvationHealth(newValue);
 		MyConfig.pushMinimumStarvationHealth();
-		return 0;
+		return 1;
 	}
 
+	public static int setDebugLevel( int newValue) {
+		MyConfig.setDebugLevel(newValue);
+		MyConfig.pushDebugValue();
+		return 1;
+	}
+
+	
 }

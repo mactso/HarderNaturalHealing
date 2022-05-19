@@ -13,7 +13,6 @@ public class WakeUpEvents {
 	public static void onPlayerWakeUp(PlayerWakeUpEvent event) {
 
 		if (event.getPlayer().level instanceof ServerLevel sl) {
-			long debug = sl.getDayTime()%24000;
 			if (sl.getDayTime() % 24000 < 40) {
 				event.getPlayer().heal((float) MyConfig.getWakeupHealingAmount());
 			}

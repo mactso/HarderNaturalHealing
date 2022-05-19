@@ -5,12 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.mactso.hardernaturalhealing.Main;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.server.level.ServerPlayer;
-
+import com.mactso.hardernaturalhealing.utility.Utility;
 
 //import net.minecraft.world.entity.player.Player;
 
@@ -105,18 +100,6 @@ public class MyConfig {
 		return maxBonusHitPointTotems;
 	}	
 
-	public static void debugMsg (int level, String dMsg) {
-		if (debugLevel > level-1) {
-			System.out.println("L"+level + ":" + dMsg);
-		}
-	}
-
-	public static void debugMsg (int level, BlockPos pos, String dMsg) {
-		if (debugLevel > level-1) {
-			System.out.println("L"+level+" ("+pos.getX()+","+pos.getY()+","+pos.getZ()+"): " + dMsg);
-		}
-	}
-
 	public static int debugLevel;
 	private static double healingPerSecond;
 	private static double maxBonusHitPointTotems;
@@ -148,9 +131,7 @@ public class MyConfig {
 	}
 
 	public static void pushDebugValue() {
-		if (debugLevel > 0) {
-			System.out.println("hardernaturalhealing debugLevel:" + MyConfig.debugLevel);
-		}
+		Utility.debugMsg(1,"hardernaturalhealing debugLevel:" + MyConfig.debugLevel);
 		COMMON.debugLevel.set(MyConfig.debugLevel);
 	}
 
@@ -231,22 +212,6 @@ public class MyConfig {
 			
 			builder.pop();
 		}
-	}
-
-
-	public static void sendBoldChat(ServerPlayer p, String chatMessage, TextColor textColor) {
-		TextComponent component = new TextComponent (chatMessage);
-
-		component.getStyle().withBold(true);
-		component.getStyle().withColor(textColor);
-
-		p.sendMessage(component, p.getUUID());
-	}	
-	
-	public static void sendChat(ServerPlayer p, String chatMessage, TextColor textColor) {
-		TextComponent component = new TextComponent (chatMessage);
-		component.getStyle().withColor(textColor);
-		p.sendMessage(component, p.getUUID());
 	}
 
 	// update config when changed by commands

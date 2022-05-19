@@ -1,6 +1,7 @@
 package com.mactso.hardernaturalhealing.forgeevents;
 
 import com.mactso.hardernaturalhealing.config.MyConfig;
+import com.mactso.hardernaturalhealing.utility.Utility;
 
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.food.FoodData;
@@ -34,8 +35,6 @@ public class PeacefulHealingHandler {
 		if (MyConfig.isPeacefulHunger()) {
 			FoodData fs = event.player.getFoodData();
 			Difficulty difficulty = event.player.level.getDifficulty();
-//			boolean secondTimer = (0 == event.player.level.getGameTime() % 20);
-//			int secondTimerint = (int) event.player.level.getGameTime() % 20;
 			if (event.phase == TickEvent.Phase.START) {
 				MyConfig.setDebugLevel(0);
 				if (event.side == LogicalSide.CLIENT) {
@@ -44,26 +43,25 @@ public class PeacefulHealingHandler {
 					cExt = fs.exhaustionLevel;
 					cFod = fs.foodLevel;
 					cTim = fs.tickTimer;
-					MyConfig.debugMsg(2, "(" + event.player.tickCount + ") C START cTim:" + cTim + " cSat:" + cSat + " cExt:" + cExt + " cFod:" + cFod + ".");
+					Utility.debugMsg(2, "(" + event.player.tickCount + ") C START cTim:" + cTim + " cSat:" + cSat + " cExt:" + cExt + " cFod:" + cFod + ".");
 				} else {
 					sRegen = event.player.level.getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
 					sSat = fs.saturationLevel;
 					sExt = fs.exhaustionLevel;
 					sFod = fs.foodLevel;
 					sTim = fs.tickTimer;
-					MyConfig.debugMsg(2, "(" + event.player.tickCount + ") S START sTim:" + sTim + " sSat:" + sSat + " sExt:" + sExt + " sFod:" + sFod + ".");
+					Utility.debugMsg(2, "(" + event.player.tickCount + ") S START sTim:" + sTim + " sSat:" + sSat + " sExt:" + sExt + " sFod:" + sFod + ".");
 				}
-				MyConfig.setDebugLevel(0);
 			}
 
 			if (event.phase == TickEvent.Phase.END) {
 				if (difficulty == Difficulty.PEACEFUL) {
 					MyConfig.setDebugLevel(0);
 					if (event.side == LogicalSide.CLIENT) {
-						MyConfig.debugMsg(2, "(" + event.player.tickCount + ") C xENDx cTim:" + cTim + " cSat:" + cSat + " cExt:" + cExt + " cFod:" + cFod + ".");
+						Utility.debugMsg(2, "(" + event.player.tickCount + ") C xENDx cTim:" + cTim + " cSat:" + cSat + " cExt:" + cExt + " cFod:" + cFod + ".");
 						fs.foodLevel = cFod;
 					} else {
-						MyConfig.debugMsg(2, "(" + event.player.tickCount + ") S xENDx sTim:" + sTim + " sSat:" + sSat + " sExt:" + sExt + " sFod:" + sFod + ".");
+						Utility.debugMsg(2, "(" + event.player.tickCount + ") S xENDx sTim:" + sTim + " sSat:" + sSat + " sExt:" + sExt + " sFod:" + sFod + ".");
 //						fs.foodLevel = sFod;
 						if ((sExt > fs.exhaustionLevel) && (sSat == 0) && (fs.foodLevel > 0)) {
 							fs.foodLevel -= 1;
@@ -79,7 +77,6 @@ public class PeacefulHealingHandler {
 						fs.tickTimer = sTim;
 					}
 				}
-				MyConfig.setDebugLevel(0);
 
 			}
 
