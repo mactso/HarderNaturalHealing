@@ -30,6 +30,11 @@ public class MyConfig {
 		COMMON = specPair.getLeft();
 	}
 
+	public static void pushDebugValue() {
+		Utility.debugMsg(1,"hardernaturalhealing debugLevel:" + MyConfig.debugLevel);
+		COMMON.debugLevel.set(MyConfig.debugLevel);
+	}
+	
 	public static void setHealingPerSecond(double healingPerSecond) {
 		MyConfig.healingPerSecond = healingPerSecond;
 	}
@@ -80,6 +85,25 @@ public class MyConfig {
 		return healingPerSecond;
 	}
 
+	public static int getHealthAfterDeath() {
+		return healthAfterDeath;
+	}
+	
+	public static void setHealthAfterDeath(int newValue) {
+		MyConfig.healthAfterDeath = newValue;
+		COMMON.healthAfterDeath.set(newValue);
+	}
+	
+	
+	public static int getHungerAfterDeath() {
+		return hungerAfterDeath;
+	}
+	
+	public static void setHungerAfterDeath(int newValue) {
+		MyConfig.hungerAfterDeath = newValue;
+		COMMON.hungerAfterDeath.set(newValue);
+	}
+
 	public static double getMinimumFoodHealingLevel() {
 		return minimumFoodHealingLevel;
 	}
@@ -104,6 +128,9 @@ public class MyConfig {
 	private static double healingPerSecond;
 	private static double maxBonusHitPointTotems;
 	private static int attackHealingDelayTicks;
+	
+	private static int healthAfterDeath;
+	private static int hungerAfterDeath;
 	private static double minimumFoodHealingLevel;
 	private static double healingExhaustionCost;
 	private static double wakeupHealingAmount;
@@ -130,10 +157,7 @@ public class MyConfig {
 		}
 	}
 
-	public static void pushDebugValue() {
-		Utility.debugMsg(1,"hardernaturalhealing debugLevel:" + MyConfig.debugLevel);
-		COMMON.debugLevel.set(MyConfig.debugLevel);
-	}
+
 
 	public static void bakeConfig() {
 
@@ -147,6 +171,8 @@ public class MyConfig {
 		wakeupHealingAmount = COMMON.wakeupHealingAmount.get();
 		minimumStarvationHealth = COMMON.minimumStarvationHealth.get();
 		peacefulHunger = COMMON.peacefulHunger.get();
+		healthAfterDeath= COMMON.healthAfterDeath.get();
+		hungerAfterDeath= COMMON.hungerAfterDeath.get();
 		if (debugLevel > 0) {
 			System.out.println("HarderNaturalHealing Debug: " + debugLevel);
 		}
@@ -157,6 +183,8 @@ public class MyConfig {
 		public final IntValue debugLevel;
 		public final IntValue attackHealingDelayTicks;
 		public final IntValue maxBonusHitPointTotems;
+		public final IntValue healthAfterDeath;
+		public final IntValue hungerAfterDeath;
 		public final DoubleValue extraExhaustionWhenHurt;
 		public final DoubleValue healingPerSecond;
 		public final DoubleValue minimumFoodHealingLevel;
@@ -185,6 +213,15 @@ public class MyConfig {
 					.translation(Main.MODID + ".config." + "healingPerSecond")
 					.defineInRange("healingPerSecond", () -> 0.25, 0.0, 10.0);
 
+			healthAfterDeath = builder.comment("healthAfterDeath")
+					.translation(Main.MODID + ".config." + "healthAfterDeath")
+					.defineInRange("healthAfterDeath", () -> 20, 0, 20);
+			
+			hungerAfterDeath = builder.comment("hungerAfterDeath")
+					.translation(Main.MODID + ".config." + "hungerAfterDeath")
+					.defineInRange("hungerAfterDeath", () -> 20, 0, 20);
+
+			
 			minimumFoodHealingLevel = builder.comment("minimumFoodHealingLevel")
 					.translation(Main.MODID + ".config." + "minimumFoodHealingLevel")
 					.defineInRange("minimumFoodHealingLevel", () -> 16.0, 0.0, 22.0);
@@ -227,6 +264,10 @@ public class MyConfig {
 		COMMON.attackHealingDelayTicks.set(MyConfig.getAttackHealingDelayTicks());			
 	}
 
+	public static void pushHungerAfterDeath() {
+		COMMON.hungerAfterDeath.set(MyConfig.getHungerAfterDeath());		
+	}
+	
 	public static void pushMinimumFoodHealingLevel() {
 		COMMON.minimumFoodHealingLevel.set(MyConfig.getMinimumFoodHealingLevel());			
 	}

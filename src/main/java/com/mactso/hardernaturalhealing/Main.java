@@ -5,6 +5,7 @@ import com.mactso.hardernaturalhealing.config.MyConfig;
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -38,8 +39,15 @@ public class Main {
 	public static class ForgeEvents {
 		@SubscribeEvent
 		public static void preInit(final ServerStartingEvent event) {
-			System.out.println("hardernaturalhealing: Turn normal healing Off");
+			System.out.println("hardernaturalhealing: Turn natural regeneration off.");
 			((GameRules.BooleanValue) event.getServer().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION)).set(false,
+					event.getServer());
+		}
+
+		@SubscribeEvent
+		public static void preInit(final ServerStoppingEvent event) {
+			System.out.println("hardernaturalhealing: Turn natural regeneration rule on.");
+			((GameRules.BooleanValue) event.getServer().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION)).set(true,
 					event.getServer());
 		}
 

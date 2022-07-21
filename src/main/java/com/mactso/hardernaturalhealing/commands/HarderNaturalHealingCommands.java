@@ -12,6 +12,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.commands.FillCommand;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityTeleportEvent.TeleportCommand;
 
 public class HarderNaturalHealingCommands {
@@ -43,11 +44,14 @@ public class HarderNaturalHealingCommands {
 			)
 			)
 		.then(Commands.literal("1-PeacefulHunger").then(
+
 				Commands.literal("true").executes(ctx -> {
+					ServerPlayer p = ctx.getSource().getPlayerOrException();
 					return MyConfig.setPeacefulHunger(true);
 				}
 				)).then (
 				Commands.literal("false").executes(ctx -> {
+					ServerPlayer p = ctx.getSource().getPlayerOrException();
 					return MyConfig.setPeacefulHunger(false);
 			}
 			)
@@ -56,6 +60,22 @@ public class HarderNaturalHealingCommands {
 		.then(Commands.literal("1-MinimumStarvationHealth").then(
 				Commands.argument("minimumStarvationHealth", IntegerArgumentType.integer(0,20)).executes(ctx -> {
 					return setMinimumStarvationHealth(IntegerArgumentType.getInteger(ctx, "minimumStarvationHealth"));
+			}
+			)
+			)
+			)
+		.then(Commands.literal("1-HealthAfterDeath").then(
+				Commands.argument("healthafterdeath", IntegerArgumentType.integer(0,20)).executes(ctx -> {
+					ServerPlayer p = ctx.getSource().getPlayerOrException();
+					return setHealthAfterDeath(p, IntegerArgumentType.getInteger(ctx, "healthafterdeath"));
+			}
+			)
+			)
+			)
+		.then(Commands.literal("1-HungerAfterDeath").then(
+				Commands.argument("hungerafterdeath", IntegerArgumentType.integer(0,20)).executes(ctx -> {
+					ServerPlayer p = ctx.getSource().getPlayerOrException();
+					return setHungerAfterDeath(p, IntegerArgumentType.getInteger(ctx, "hungerafterdeath"));
 			}
 			)
 			)
@@ -130,8 +150,10 @@ public class HarderNaturalHealingCommands {
 		Utility.sendBoldChat (p,chatMessage, TextColor.fromLegacyFormat(ChatFormatting.DARK_GREEN));
 		chatMessage = 
 				" Debug Level...................................: " + MyConfig.getDebugLevel() +
+				"\n health after death .....................: " + MyConfig.getHealthAfterDeath() +
 				"\n peaceful hunger........................: " + MyConfig.isPeacefulHunger() +
-			    "\n minimum starvation health...: " + MyConfig.getMinimumStarvationHealth() +
+				"\n hunger after death .....................: " + MyConfig.getHungerAfterDeath() +
+				"\n minimum starvation health...: " + MyConfig.getMinimumStarvationHealth() +
 			    "\n healingPerSecond.....................: "+ MyConfig.getHealingPerSecond() +
 				"\n attackHealingDelayTicks.......: " + MyConfig.getAttackHealingDelayTicks() +
 				"\n minimumFoodHealingLevel......: " + MyConfig.getMinimumFoodHealingLevel() +
@@ -211,12 +233,23 @@ public class HarderNaturalHealingCommands {
 		return 1;
 	}	
 
-	public static int setMinimumStarvationHealth( int newValue) {
+	public static int setMinimumStarvationHealth(int newValue) {
 		MyConfig.setMinimumStarvationHealth(newValue);
 		MyConfig.pushMinimumStarvationHealth();
 		return 1;
 	}
 
+	public static int setHungerAfterDeath(ServerPlayer sp, int newValue) {
+		MyConfig.setHungerAfterDeath(newValue);
+		showSettings(sp);
+		return 1;
+	}
+	
+	public static int setHealthAfterDeath(ServerPlayer sp, int newValue) {
+		MyConfig.setHealthAfterDeath(newValue);
+		showSettings(sp);
+		return 1;
+	}	
 	public static int setDebugLevel( int newValue) {
 		MyConfig.setDebugLevel(newValue);
 		MyConfig.pushDebugValue();
