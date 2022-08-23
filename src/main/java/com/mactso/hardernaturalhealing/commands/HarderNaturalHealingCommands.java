@@ -9,11 +9,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.server.commands.FillCommand;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.EntityTeleportEvent.TeleportCommand;
 
 public class HarderNaturalHealingCommands {
 	String subcommand = "";
@@ -140,14 +136,14 @@ public class HarderNaturalHealingCommands {
 		String[] setupNames = new String[] {"easy", "normal", "harder", "superhard", "wakeup"};
 		String chatMessage = 
 				"Setup: " + setupNames [i] ;
-        Utility.sendChat (p,chatMessage,TextColor.fromLegacyFormat(ChatFormatting.GREEN));
+        Utility.sendChat (p,chatMessage,ChatFormatting.GREEN);
 
 	}
 	
 	private static void showSettings(ServerPlayer p) {
 		String chatMessage = 
 				"Current Settings";
-		Utility.sendBoldChat (p,chatMessage, TextColor.fromLegacyFormat(ChatFormatting.DARK_GREEN));
+		Utility.sendBoldChat (p,chatMessage, ChatFormatting.DARK_GREEN);
 		chatMessage = 
 				" Debug Level...................................: " + MyConfig.getDebugLevel() +
 				"\n health after death .....................: " + MyConfig.getHealthAfterDeath() +
@@ -161,7 +157,7 @@ public class HarderNaturalHealingCommands {
 				"\n wakeupHealingAmount..............: " + MyConfig.getWakeupHealingAmount() +
 				"\n extraExhaustionWhenHurt..: "+MyConfig.getExtraExhaustionWhenHurt();
 				
-		        Utility.sendChat (p,chatMessage,TextColor.fromLegacyFormat(ChatFormatting.GREEN));
+		        Utility.sendChat (p,chatMessage,ChatFormatting.GREEN);
 	}
 
 	public static int setNewSetting(ServerPlayer p, int s) {

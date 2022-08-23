@@ -11,8 +11,9 @@ public class PlayerWakeupEventHandler {
 
 	@SubscribeEvent
 	public static void onPlayerWakeUp(PlayerWakeUpEvent event) {
-        if (!event.getEntityLiving().level.isClientSide && !event.wakeImmediately() && !event.updateWorld()) {
-			event.getPlayer().heal((float) MyConfig.getWakeupHealingAmount());
+		// TODO: confirm wake immediately is the new updateworld()
+        if (!event.getEntity().level.isClientSide && !event.wakeImmediately()) {
+			event.getEntity().heal((float) MyConfig.getWakeupHealingAmount());
         }
 	}
 }

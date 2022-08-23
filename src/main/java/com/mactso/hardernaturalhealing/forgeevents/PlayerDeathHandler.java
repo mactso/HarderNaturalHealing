@@ -12,7 +12,7 @@ public class PlayerDeathHandler {
 
 	@SubscribeEvent
 	public static void onPlayerDeath(Clone event) {
-		Player p = event.getPlayer();
+		Player p = event.getEntity();
 		int v = MyConfig.getHealthAfterDeath();
 		if (event.isWasDeath()) {
 			if (MyConfig.getHealthAfterDeath() < 20) {
