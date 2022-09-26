@@ -27,7 +27,7 @@ public class PlayerTickHandler {
 
 			// heal once per second if the player is wounded.
 			// additionally skip dead players. Some mods don't like receiving events for dead players.
-			if (!p.isDeadOrDying() || (event.phase == TickEvent.Phase.END) || (gameTime % 20 != 0) || (p.getHealth() >= p.getMaxHealth())) {
+			if (p.isDeadOrDying() || (event.phase == TickEvent.Phase.END) || (gameTime % 20 != 0) || (p.getHealth() >= p.getMaxHealth())) {
 				return;
 			}
 			
