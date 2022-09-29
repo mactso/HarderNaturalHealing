@@ -10,10 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.server.commands.FillCommand;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.EntityTeleportEvent.TeleportCommand;
 
 public class HarderNaturalHealingCommands {
 	String subcommand = "";
