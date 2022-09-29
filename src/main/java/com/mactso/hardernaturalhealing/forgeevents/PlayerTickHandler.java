@@ -26,7 +26,7 @@ public class PlayerTickHandler {
 			long gameTime = w.getGameTime();
 
 			// heal once per second if the player is wounded.
-			if ((event.phase == TickEvent.Phase.END) || (gameTime % 20 != 0) || (p.getHealth() >= p.getMaxHealth())) {
+			if (p.isDeadOrDying() ||(event.phase == TickEvent.Phase.END) || (gameTime % 20 != 0) || (p.getHealth() >= p.getMaxHealth())) {
 				return;
 			}
 			
