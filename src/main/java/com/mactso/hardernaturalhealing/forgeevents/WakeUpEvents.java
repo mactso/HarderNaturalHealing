@@ -12,7 +12,7 @@ public class WakeUpEvents {
 	@SubscribeEvent
 	public static void onPlayerWakeUp(PlayerWakeUpEvent event) {
 
-		if (event.getEntity().level instanceof ServerLevel sl) {
+		if (event.getEntity().level() instanceof ServerLevel sl) {
 			if (sl.getDayTime() % 24000 < 40) {
 				event.getEntity().heal((float) MyConfig.getWakeupHealingAmount());
 			}

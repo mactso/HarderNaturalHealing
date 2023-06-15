@@ -8,9 +8,8 @@ import org.apache.logging.log4j.Logger;
 import com.mactso.hardernaturalhealing.config.MyConfig;
 import com.mactso.hardernaturalhealing.utility.Utility;
 
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.food.FoodData;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.coremod.api.ASMAPI;
 import net.minecraftforge.event.TickEvent;
@@ -57,11 +56,11 @@ public class PeacefulHealingHandler {
 
 		if (MyConfig.isPeacefulHunger()) {
 			FoodData fs = event.player.getFoodData();
-			Difficulty difficulty = event.player.level.getDifficulty();
+			Difficulty difficulty = event.player.level().getDifficulty();
 			if (event.phase == TickEvent.Phase.START) {
 				MyConfig.setDebugLevel(0);
 				if (event.side == LogicalSide.CLIENT) {
-					cRegen = event.player.level.getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
+					cRegen = event.player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
 					cSat = fs.getSaturationLevel();
 					cExt = fs.getExhaustionLevel();
 					cFod = fs.getFoodLevel();
@@ -78,7 +77,7 @@ public class PeacefulHealingHandler {
 					Utility.debugMsg(2, "(" + event.player.tickCount + ") C START cTim:" + cTim + " cSat:" + cSat
 							+ " cExt:" + cExt + " cFod:" + cFod + ".");
 				} else {
-					sRegen = event.player.level.getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
+					sRegen = event.player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
 					sSat = fs.getSaturationLevel();
 					sExt = fs.getExhaustionLevel();
 					sFod = fs.getFoodLevel();
@@ -115,7 +114,7 @@ public class PeacefulHealingHandler {
 						if (fs.getFoodLevel() == 0) {
 							if (++sTim > 80) {
 								if (event.player.getHealth() > MyConfig.getMinimumStarvationHealth()) {
-									event.player.hurt(DamageSource.STARVE, 1.0F);
+									event.player.hurt(event.player.damageSources().starve(), 1.0F);
 								}
 								sTim = 0;
 							}

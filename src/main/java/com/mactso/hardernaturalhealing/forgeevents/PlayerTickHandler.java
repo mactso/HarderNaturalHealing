@@ -3,11 +3,10 @@ package com.mactso.hardernaturalhealing.forgeevents;
 import com.mactso.hardernaturalhealing.config.MyConfig;
 import com.mactso.hardernaturalhealing.utility.Utility;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,7 +21,7 @@ public class PlayerTickHandler {
 		if (event.player.getCommandSenderWorld() instanceof ServerLevel) {
 
 			Player p = event.player;
-			Level w = p.level;
+			Level w = p.level();
 			long gameTime = w.getGameTime();
 
 			// heal once per second if the player is wounded.
@@ -40,7 +39,7 @@ public class PlayerTickHandler {
 			}
 			
 			// Minecraft starves hard mode players to death.
-			Difficulty dif = p.level.getDifficulty();
+			Difficulty dif = p.level().getDifficulty();
 			boolean handleStarving = false;
 			if ((p.getFoodData().getFoodLevel() <= 0)) {
 				handleStarving = true;
@@ -52,7 +51,7 @@ public class PlayerTickHandler {
 			if (handleStarving) {
 				// HarderNaturalHealing will starve the player every 4 seconds until at the configured minimum health level.
 				if ((gameTime%80 == 0) && (p.getHealth() > MyConfig.getMinimumStarvationHealth())) {
-	                p.hurt(DamageSource.STARVE, 1.0F);
+	                p.hurt(p.damageSources().starve(), 1.0F);
 		        }
 			}
 
