@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[41,)"
+loaderVersion="[45,)"
 license="MIT License"
 [[mods]]
 modId="hardernaturalhealing"
@@ -13,13 +13,13 @@ description='Harder Natural Healing Mod.'
 [[dependencies.hardernaturalhealing]]
     modId="forge"
     mandatory=true
-    versionRange="[41,)"
+    versionRange="[45,)"
     ordering="NONE"
     side="SERVER"
 
 [[dependencies.hardernaturalhealing]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.3,1.20)"
+    versionRange="[1.19.4,1.20)"
     ordering="NONE"
     side="SERVER"
