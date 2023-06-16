@@ -8,9 +8,8 @@ import org.apache.logging.log4j.Logger;
 import com.mactso.hardernaturalhealing.config.MyConfig;
 import com.mactso.hardernaturalhealing.utility.Utility;
 
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.food.FoodData;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.coremod.api.ASMAPI;
 import net.minecraftforge.event.TickEvent;
@@ -115,7 +114,7 @@ public class PeacefulHealingHandler {
 						if (fs.getFoodLevel() == 0) {
 							if (++sTim > 80) {
 								if (event.player.getHealth() > MyConfig.getMinimumStarvationHealth()) {
-									event.player.hurt(DamageSource.STARVE, 1.0F);
+									event.player.hurt(event.player.damageSources().starve(), 1.0F);
 								}
 								sTim = 0;
 							}
