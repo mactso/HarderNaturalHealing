@@ -19,6 +19,4 @@ gradle-app.setting
 /.settings/
 /run/
 /.project
-/runClient.launch
-/runData.launch
-/runServer.launch
+*.launch
