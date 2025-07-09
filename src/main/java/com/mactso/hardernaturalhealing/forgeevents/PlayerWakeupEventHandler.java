@@ -19,7 +19,7 @@ public class PlayerWakeupEventHandler {
 		if (e.level().isClientSide()) 
 			return;
 		
-		if (!e.level().isDay())
+		if (!e.level().isBrightOutside())
 			return;
 
 		event.getEntity().heal((float) MyConfig.getWakeupHealingAmount());
