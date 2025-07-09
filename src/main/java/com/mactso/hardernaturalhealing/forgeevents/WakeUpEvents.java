@@ -4,7 +4,7 @@ import com.mactso.hardernaturalhealing.config.MyConfig;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber()

@@ -31,15 +31,7 @@ public class HarderNaturalHealingCommands {
 				return source.hasPermission(2);
 			}
 		)
-		.then(Commands.literal("1-NewSetting").then(
-				Commands.argument("newSetting", IntegerArgumentType.integer(1,5)).executes(ctx -> {
-					ServerPlayer p = ctx.getSource().getPlayerOrException();
-					return setNewSetting(p, IntegerArgumentType.getInteger(ctx, "newSetting"));
-			}
-			)
-			)
-			)
-		.then(Commands.literal("1-PeacefulHunger").then(
+		.then(Commands.literal("1-NewSettingsSet:PeacefulHunger").then(
 
 				Commands.literal("true").executes(ctx -> {
 					ServerPlayer p = ctx.getSource().getPlayerOrException();
@@ -53,14 +45,14 @@ public class HarderNaturalHealingCommands {
 			)
 			)
 			)
-		.then(Commands.literal("1-MinimumStarvationHealth").then(
+		.then(Commands.literal("1-New SettingsSet:MinimumStarvationHealth").then(
 				Commands.argument("minimumStarvationHealth", IntegerArgumentType.integer(0,20)).executes(ctx -> {
 					return setMinimumStarvationHealth(IntegerArgumentType.getInteger(ctx, "minimumStarvationHealth"));
 			}
 			)
 			)
 			)
-		.then(Commands.literal("1-HealthAfterDeath").then(
+		.then(Commands.literal("1-NewSettingsSet:HealthAfterDeath").then(
 				Commands.argument("healthafterdeath", IntegerArgumentType.integer(0,20)).executes(ctx -> {
 					ServerPlayer p = ctx.getSource().getPlayerOrException();
 					return setHealthAfterDeath(p, IntegerArgumentType.getInteger(ctx, "healthafterdeath"));
@@ -68,7 +60,7 @@ public class HarderNaturalHealingCommands {
 			)
 			)
 			)
-		.then(Commands.literal("1-HungerAfterDeath").then(
+		.then(Commands.literal("1-NewSettingsSet:HungerAfterDeath").then(
 				Commands.argument("hungerafterdeath", IntegerArgumentType.integer(0,20)).executes(ctx -> {
 					ServerPlayer p = ctx.getSource().getPlayerOrException();
 					return setHungerAfterDeath(p, IntegerArgumentType.getInteger(ctx, "hungerafterdeath"));

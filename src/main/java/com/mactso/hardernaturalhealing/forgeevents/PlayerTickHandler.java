@@ -8,7 +8,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 
@@ -16,16 +16,16 @@ import net.minecraftforge.fml.common.Mod;
 public class PlayerTickHandler {
 
 	@SubscribeEvent
-	public static void playerTickHandler(TickEvent.PlayerTickEvent event) {
+	public static void playerTickHandler(TickEvent.PlayerTickEvent.Pre event) {
 
-		if (event.player.getCommandSenderWorld() instanceof ServerLevel) {
+		if (event.player.level() instanceof ServerLevel) {
 
 			Player p = event.player;
 			Level w = p.level();
 			long gameTime = w.getGameTime();
 
 			// heal once per second if the player is wounded.
-			if (p.isDeadOrDying() ||(event.phase == TickEvent.Phase.END) || (gameTime % 20 != 0) || (p.getHealth() >= p.getMaxHealth())) {
+			if (p.isDeadOrDying() || (gameTime % 20 != 0) || (p.getHealth() >= p.getMaxHealth())) {
 				return;
 			}
 			

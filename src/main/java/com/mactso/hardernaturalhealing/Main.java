@@ -8,7 +8,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -23,11 +23,17 @@ public class Main {
 
     public Main(FMLJavaModLoadingContext context)
     {
-		context.getModEventBus().register(this);
 		context.registerConfig(ModConfig.Type.COMMON, MyConfig.COMMON_SPEC);
-		Utility.debugMsg (0, MODID + ": Registering Mod");
+        FMLCommonSetupEvent.getBus(context.getModBusGroup()).addListener(this::handleCommonSetup);
+    	Utility.debugMsg(0,MODID + ": Registering Mod.");
 	}
 
+    // Register ourselves for server and other game events we are interested in
+	@SubscribeEvent 
+	public void handleCommonSetup (final FMLCommonSetupEvent event) {
+		// nothing happens in here any more.
+	}       
+	
 	@SubscribeEvent
 	public static void preInit(final FMLCommonSetupEvent event) {
 		System.out.println("hardernaturalhealing: Registering Handler");
@@ -41,21 +47,21 @@ public class Main {
 	public static class ForgeEvents {
 		@SubscribeEvent
 		public static void preInit(final ServerStartingEvent event) {
-			System.out.println("hardernaturalhealing: Turn natural regeneration off.");
+			Utility.debugMsg(0,"hardernaturalhealing: Turn natural regeneration rule off.");
 			((GameRules.BooleanValue) event.getServer().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION)).set(false,
 					event.getServer());
 		}
 
 		@SubscribeEvent
 		public static void preInit(final ServerStoppingEvent event) {
-			System.out.println("hardernaturalhealing: Turn natural regeneration rule on.");
+			Utility.debugMsg(0,"hardernaturalhealing: Turn natural regeneration rule on.");
 			((GameRules.BooleanValue) event.getServer().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION)).set(true,
 					event.getServer());
 		}
 
 		@SubscribeEvent 		
 		public static void onCommandsRegistry(final RegisterCommandsEvent event) {
-			System.out.println("Happy Trails: Registering Command Dispatcher");
+			Utility.debugMsg(1,"HarderNaturalHealing: Registering Command Dispatcher");
 			HarderNaturalHealingCommands.register(event.getDispatcher());			
 		}
 	}
