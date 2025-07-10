@@ -119,6 +119,10 @@ public class MyConfig {
 	public static int getAttackHealingDelayTicks() {
 		return attackHealingDelayTicks;
 	}
+
+	public static int getAttackHealingDelaySeconds() {
+		return attackHealingDelayTicks/20; 
+	}
 	
 	public static double getMaxBonusHitPointTotems() {
 		return maxBonusHitPointTotems;
