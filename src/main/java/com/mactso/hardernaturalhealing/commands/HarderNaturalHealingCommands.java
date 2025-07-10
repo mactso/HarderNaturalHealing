@@ -31,7 +31,15 @@ public class HarderNaturalHealingCommands {
 				return source.hasPermission(2);
 			}
 		)
-		.then(Commands.literal("1-NewSettingsSet:PeacefulHunger").then(
+		.then(Commands.literal("1-NewSetting-(1to5)").then(
+				Commands.argument("newSetting", IntegerArgumentType.integer(1,5)).executes(ctx -> {
+					ServerPlayer p = ctx.getSource().getPlayerOrException();
+					return setNewSetting(p, IntegerArgumentType.getInteger(ctx, "newSetting"));
+			}
+			)
+			)
+			)
+		.then(Commands.literal("1-PeacefulHunger").then(
 
 				Commands.literal("true").executes(ctx -> {
 					ServerPlayer p = ctx.getSource().getPlayerOrException();
@@ -45,14 +53,14 @@ public class HarderNaturalHealingCommands {
 			)
 			)
 			)
-		.then(Commands.literal("1-New SettingsSet:MinimumStarvationHealth").then(
+		.then(Commands.literal("1-MinimumStarvationHealth").then(
 				Commands.argument("minimumStarvationHealth", IntegerArgumentType.integer(0,20)).executes(ctx -> {
 					return setMinimumStarvationHealth(IntegerArgumentType.getInteger(ctx, "minimumStarvationHealth"));
 			}
 			)
 			)
 			)
-		.then(Commands.literal("1-NewSettingsSet:HealthAfterDeath").then(
+		.then(Commands.literal("1-HealthAfterDeath").then(
 				Commands.argument("healthafterdeath", IntegerArgumentType.integer(0,20)).executes(ctx -> {
 					ServerPlayer p = ctx.getSource().getPlayerOrException();
 					return setHealthAfterDeath(p, IntegerArgumentType.getInteger(ctx, "healthafterdeath"));
@@ -60,7 +68,7 @@ public class HarderNaturalHealingCommands {
 			)
 			)
 			)
-		.then(Commands.literal("1-NewSettingsSet:HungerAfterDeath").then(
+		.then(Commands.literal("1-HungerAfterDeath").then(
 				Commands.argument("hungerafterdeath", IntegerArgumentType.integer(0,20)).executes(ctx -> {
 					ServerPlayer p = ctx.getSource().getPlayerOrException();
 					return setHungerAfterDeath(p, IntegerArgumentType.getInteger(ctx, "hungerafterdeath"));
@@ -125,10 +133,10 @@ public class HarderNaturalHealingCommands {
 
 
 	private static void showNewSetup (ServerPlayer p, int i) {
-		String[] setupNames = new String[] {"easy", "normal", "harder", "superhard", "wakeup"};
+		String[] setupNames = new String[] {"easy healing", "original healing", "harder healing", "superhard healing", "Healing from Sleep Only"};
 		String chatMessage = 
-				"Setup: " + setupNames [i] ;
-        Utility.sendChat (p,chatMessage,ChatFormatting.GREEN);
+				"\nChanged to Setting: " + setupNames [i] ;
+        Utility.sendChat (p,chatMessage,ChatFormatting.YELLOW);
 
 	}
 	
@@ -137,17 +145,17 @@ public class HarderNaturalHealingCommands {
 				"Current Settings";
 		Utility.sendBoldChat (p,chatMessage, ChatFormatting.DARK_GREEN);
 		chatMessage = 
-				" Debug Level...................................: " + MyConfig.getDebugLevel() +
-				"\n health after death .....................: " + MyConfig.getHealthAfterDeath() +
-				"\n peaceful hunger........................: " + MyConfig.isPeacefulHunger() +
-				"\n hunger after death .....................: " + MyConfig.getHungerAfterDeath() +
-				"\n minimum starvation health...: " + MyConfig.getMinimumStarvationHealth() +
-			    "\n healingPerSecond.....................: "+ MyConfig.getHealingPerSecond() +
-				"\n attackHealingDelayTicks.......: " + MyConfig.getAttackHealingDelayTicks() +
-				"\n minimumFoodHealingLevel......: " + MyConfig.getMinimumFoodHealingLevel() +
-				"\n healingExhaustionCost..........: " + MyConfig.getHealingExhaustionCost() +
-				"\n wakeupHealingAmount..............: " + MyConfig.getWakeupHealingAmount() +
-				"\n extraExhaustionWhenHurt..: "+MyConfig.getExtraExhaustionWhenHurt();
+				" Debug Level....................................................................: " + MyConfig.getDebugLevel() +
+				"\n Health when respawning .....................................: " + MyConfig.getHealthAfterDeath() +
+				"\n Use Peaceful Difficulty Hunger.....................: " + MyConfig.isPeacefulHunger() +
+				"\n New Hunger Level when Respawning ........: " + MyConfig.getHungerAfterDeath() +
+				"\n Minimum Health from Starvation.......................: " + MyConfig.getMinimumStarvationHealth() +
+			    "\n Healing Per Second..................................................: "+ MyConfig.getHealingPerSecond() +
+				"\n Seconds Healing Delayed By Attacking....: " + MyConfig.getAttackHealingDelaySeconds() +
+				"\n Minimum Food Healing Level.................................: " + MyConfig.getMinimumFoodHealingLevel() +
+				"\n Healing Food Exhaustion Cost.........................: " + MyConfig.getHealingExhaustionCost() +
+				"\n Sleep Healing Amount..............................................: " + MyConfig.getWakeupHealingAmount() +
+				"\n Extra Food Exhaustion When Hurt..............: "+MyConfig.getExtraExhaustionWhenHurt();
 				
 		        Utility.sendChat (p,chatMessage,ChatFormatting.GREEN);
 	}

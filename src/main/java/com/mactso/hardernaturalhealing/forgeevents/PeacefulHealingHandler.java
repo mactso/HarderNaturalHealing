@@ -13,7 +13,6 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.coremod.api.ASMAPI;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -68,82 +67,89 @@ public class PeacefulHealingHandler {
 	}
 
 	@SubscribeEvent
-	public static void onPlayerHealing(PlayerTickEvent event) {
+	public static void onPlayerHealing(PlayerTickEvent.Pre event) {
 
 		if (MyConfig.isPeacefulHunger()) {
 			FoodData foodData = event.player.getFoodData();
 			Difficulty difficulty = event.player.level().getDifficulty();
-			if (event.phase == TickEvent.Phase.START) {
-				MyConfig.setDebugLevel(0);
-				if (event.side == LogicalSide.CLIENT) {
-					// issue they have removed gamerules from the client level
-//					cRegen = event.player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
-					// however, it looks like cRegen isn't used.
-					cSat = foodData.getSaturationLevel();
-					cFod = foodData.getFoodLevel();
-					cExt = getExhaustionLevel(foodData, " client ");
-					cTim = getTickTimer(foodData);
-					Utility.debugMsg(2, "(" + event.player.tickCount + ") C START cTim:" + cTim + " cSat:" + cSat
-							+ " cExt:" + cExt + " cFod:" + cFod + ".");
-				} else {
-					ServerLevel slevel = (ServerLevel) event.player.level();
-					sRegen = slevel.getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
-					sSat = foodData.getSaturationLevel();
-					sFod = foodData.getFoodLevel();
-//					sTim = fs.tickTimer;
-					sExt = getExhaustionLevel(foodData, " server ");
-					sTim = getTickTimer(foodData);
-					try {
-						sTim = (int) tickTimerField.get(foodData);
-					} catch (IllegalArgumentException e) {
-						LOGGER.error("Illegal Argument: failed to get server FoodData tickTimer.");
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						LOGGER.error("Illegal Access: failed to get server FoodData tickTimer.");
-						e.printStackTrace();
-					}
 
-					Utility.debugMsg(2, "(" + event.player.tickCount + ") S START sTim:" + sTim + " sSat:" + sSat
-							+ " sExt:" + sExt + " sFod:" + sFod + ".");
+			MyConfig.setDebugLevel(0);
+			if (event.side == LogicalSide.CLIENT) {
+				// issue they have removed gamerules from the client level
+				// it's also possible that the server is sending messages about food levels constantly now.
+//					cRegen = event.player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
+				// however, it looks like cRegen isn't used.
+				cSat = foodData.getSaturationLevel();
+				cFod = foodData.getFoodLevel();
+				cExt = getExhaustionLevel(foodData, " client ");
+				cTim = getTickTimer(foodData);
+				Utility.debugMsg(2, "(" + event.player.tickCount + ") C START cTim:" + cTim + " cSat:" + cSat + " cExt:"
+						+ cExt + " cFod:" + cFod + ".");
+			} else {
+				ServerLevel slevel = (ServerLevel) event.player.level();
+				sRegen = slevel.getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
+				sSat = foodData.getSaturationLevel();
+				sFod = foodData.getFoodLevel();
+//					sTim = fs.tickTimer;
+				sExt = getExhaustionLevel(foodData, " server ");
+				sTim = getTickTimer(foodData);
+				try {
+					sTim = (int) tickTimerField.get(foodData);
+				} catch (IllegalArgumentException e) {
+					LOGGER.error("Illegal Argument: failed to get server FoodData tickTimer.");
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					LOGGER.error("Illegal Access: failed to get server FoodData tickTimer.");
+					e.printStackTrace();
 				}
+
+				Utility.debugMsg(2, "(" + event.player.tickCount + ") S START sTim:" + sTim + " sSat:" + sSat + " sExt:"
+						+ sExt + " sFod:" + sFod + ".");
 			}
 
-			if (event.phase == TickEvent.Phase.END) {
-				if (difficulty == Difficulty.PEACEFUL) {
-					MyConfig.setDebugLevel(0);
-					if (event.side == LogicalSide.CLIENT) {
-						Utility.debugMsg(2, "(" + event.player.tickCount + ") C xENDx cTim:" + cTim + " cSat:" + cSat
-								+ " cExt:" + cExt + " cFod:" + cFod + ".");
-						foodData.setFoodLevel(cFod);
-					} else {
-						Utility.debugMsg(2, "(" + event.player.tickCount + ") S xENDx sTim:" + sTim + " sSat:" + sSat
-								+ " sExt:" + sExt + " sFod:" + sFod + ".");
+		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerHealing(PlayerTickEvent.Post event) {
+
+		if (MyConfig.isPeacefulHunger()) {
+			FoodData foodData = event.player.getFoodData();
+			Difficulty difficulty = event.player.level().getDifficulty();
+
+			if (difficulty == Difficulty.PEACEFUL) {
+				MyConfig.setDebugLevel(0);
+				if (event.side == LogicalSide.CLIENT) {
+					Utility.debugMsg(2, "(" + event.player.tickCount + ") C xENDx cTim:" + cTim + " cSat:" + cSat
+							+ " cExt:" + cExt + " cFod:" + cFod + ".");
+					foodData.setFoodLevel(cFod);
+				} else {
+					Utility.debugMsg(2, "(" + event.player.tickCount + ") S xENDx sTim:" + sTim + " sSat:" + sSat
+							+ " sExt:" + sExt + " sFod:" + sFod + ".");
 //						fs.foodLevel = sFod;
 
-						if ((sExt > getExhaustionLevel(foodData, "")) && (sSat == 0) && (foodData.getFoodLevel() > 0)) {
-							foodData.setFoodLevel(foodData.getFoodLevel() - 1);
-						}
-						if (foodData.getFoodLevel() == 0) {
-							if (++sTim > 80) {
-								if (event.player.getHealth() > MyConfig.getMinimumStarvationHealth()) {
-									event.player.hurt(event.player.damageSources().starve(), 1.0F);
-								}
-								sTim = 0;
+					if ((sExt > getExhaustionLevel(foodData, "")) && (sSat == 0) && (foodData.getFoodLevel() > 0)) {
+						foodData.setFoodLevel(foodData.getFoodLevel() - 1);
+					}
+					if (foodData.getFoodLevel() == 0) {
+						if (++sTim > 80) {
+							if (event.player.getHealth() > MyConfig.getMinimumStarvationHealth()) {
+								event.player.hurt(event.player.damageSources().starve(), 1.0F);
 							}
-						}
-//						fs.tickTimer = sTim;
-						try {
-							tickTimerField.setInt(foodData, sTim);
-						} catch (IllegalArgumentException e) {
-							LOGGER.error("Illegal Argument: failed to update FoodData tickTimer.");
-							e.printStackTrace();
-						} catch (IllegalAccessException e) {
-							LOGGER.error("Illegal Access: failed to update FoodData tickTimer.");
-							e.printStackTrace();
+							sTim = 0;
 						}
 					}
+//						fs.tickTimer = sTim;
+					try {
+						tickTimerField.setInt(foodData, sTim);
+					} catch (IllegalArgumentException e) {
+						LOGGER.error("Illegal Argument: failed to update FoodData tickTimer.");
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						LOGGER.error("Illegal Access: failed to update FoodData tickTimer.");
+						e.printStackTrace();
+					}
 				}
-
 			}
 
 		}
@@ -191,13 +197,13 @@ public class PeacefulHealingHandler {
 		}
 		return f;
 	}
-	
-    public static void setExhaustionLevel(FoodData foodData, float newValue, String side) {
-        try {
-            exhaustionLevelField.setFloat(foodData, newValue);
-        } catch (IllegalAccessException e) {
+
+	public static void setExhaustionLevel(FoodData foodData, float newValue, String side) {
+		try {
+			exhaustionLevelField.setFloat(foodData, newValue);
+		} catch (IllegalAccessException e) {
 			LOGGER.error("Illegal Access: failed to set " + side + " FoodData exhaustionLevel value.");
-            e.printStackTrace();
-        }
-    }
+			e.printStackTrace();
+		}
+	}
 }
