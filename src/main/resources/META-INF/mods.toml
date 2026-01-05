@@ -1,25 +1,25 @@
 modLoader="javafml"
-loaderVersion="[56,)"
-license="MIT License"
+loaderVersion="[61,)"
+license="MIT"
+
 [[mods]]
 modId="hardernaturalhealing"
-version="${file.jarVersion}"
+version="61.1.15"
 displayName="Harder Natural Healing Mod"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/harder-natural-healing"
-updateJSONURL="https://raw.githubusercontent.com/mactso/HarderNaturalHealing/main/update.json"
 logoFile="Logo.png"
 authors="MacTso, Lupicus"
 description='Harder Natural Healing Mod.'
 [[dependencies.hardernaturalhealing]]
-    modId="forge"
-    mandatory=true
-    versionRange="[56,)"
-    ordering="NONE"
-    side="SERVER"
+modId="forge"
+mandatory=true
+versionRange="[61,)"
+ordering="NONE"
+side="BOTH"
 
 [[dependencies.hardernaturalhealing]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.21.6,1.22)"
-    ordering="NONE"
-    side="SERVER"
+modId="minecraft"
+mandatory=true
+versionRange="[1.21.11,1.22)"
+ordering="NONE"
+side="BOTH"
