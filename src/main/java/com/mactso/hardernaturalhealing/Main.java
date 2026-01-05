@@ -1,10 +1,12 @@
 package com.mactso.hardernaturalhealing;
 
-import com.mactso.hardernaturalhealing.commands.HarderNaturalHealingCommands;
+import com.mactso.hardernaturalhealing.commands.MyCommands;
 import com.mactso.hardernaturalhealing.config.MyConfig;
-import com.mactso.hardernaturalhealing.utility.Utility;
+import com.mactso.hardernaturalhealing.utility.MyUtilities;
 
-import net.minecraft.world.level.GameRules;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
@@ -25,7 +27,7 @@ public class Main {
     {
 		context.registerConfig(ModConfig.Type.COMMON, MyConfig.COMMON_SPEC);
         FMLCommonSetupEvent.getBus(context.getModBusGroup()).addListener(this::handleCommonSetup);
-    	Utility.debugMsg(0,MODID + ": Registering Mod.");
+    	MyUtilities.debugMsg(0,MODID + ": Registering Mod.");
 	}
 
     // Register ourselves for server and other game events we are interested in
@@ -47,22 +49,28 @@ public class Main {
 	public static class ForgeEvents {
 		@SubscribeEvent
 		public static void preInit(final ServerStartingEvent event) {
-			Utility.debugMsg(0,"hardernaturalhealing: Turn natural regeneration rule off.");
-			((GameRules.BooleanValue) event.getServer().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION)).set(false,
-					event.getServer());
+			MyUtilities.debugMsg(0,"hardernaturalhealing: Turn natural regeneration rule off.");
+			
+			MinecraftServer server = event.getServer();
+		    for (ServerLevel level : server.getAllLevels()) {
+		    	level.getGameRules().set(GameRules.NATURAL_HEALTH_REGENERATION, false, server);
+		    }
+
 		}
 
 		@SubscribeEvent
 		public static void preInit(final ServerStoppingEvent event) {
-			Utility.debugMsg(0,"hardernaturalhealing: Turn natural regeneration rule on.");
-			((GameRules.BooleanValue) event.getServer().getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION)).set(true,
-					event.getServer());
+			MyUtilities.debugMsg(0,"hardernaturalhealing: Turn natural regeneration rule on.");
+			MinecraftServer server = event.getServer();
+		    for (ServerLevel level : server.getAllLevels()) {
+		    	level.getGameRules().set(GameRules.NATURAL_HEALTH_REGENERATION, true, server);
+		    }
 		}
 
 		@SubscribeEvent 		
 		public static void onCommandsRegistry(final RegisterCommandsEvent event) {
-			Utility.debugMsg(1,"HarderNaturalHealing: Registering Command Dispatcher");
-			HarderNaturalHealingCommands.register(event.getDispatcher());			
+			MyUtilities.debugMsg(1,"HarderNaturalHealing: Registering Command Dispatcher");
+			MyCommands.register(event.getDispatcher());			
 		}
 	}
 	

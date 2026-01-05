@@ -6,12 +6,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.mactso.hardernaturalhealing.config.MyConfig;
-import com.mactso.hardernaturalhealing.utility.Utility;
+import com.mactso.hardernaturalhealing.utility.MyUtilities;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraftforge.coremod.api.ASMAPI;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -70,11 +71,12 @@ public class PeacefulHealingHandler {
 	public static void onPlayerHealing(PlayerTickEvent.Pre event) {
 
 		if (MyConfig.isPeacefulHunger()) {
-			FoodData foodData = event.player.getFoodData();
-			Difficulty difficulty = event.player.level().getDifficulty();
+			
+			FoodData foodData = event.player().getFoodData();
+			Difficulty difficulty = event.player().level().getDifficulty();
 
 			MyConfig.setDebugLevel(0);
-			if (event.side == LogicalSide.CLIENT) {
+			if (event.side() == LogicalSide.CLIENT) {
 				// issue they have removed gamerules from the client level
 				// it's also possible that the server is sending messages about food levels constantly now.
 //					cRegen = event.player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
@@ -83,11 +85,12 @@ public class PeacefulHealingHandler {
 				cFod = foodData.getFoodLevel();
 				cExt = getExhaustionLevel(foodData, " client ");
 				cTim = getTickTimer(foodData);
-				Utility.debugMsg(2, "(" + event.player.tickCount + ") C START cTim:" + cTim + " cSat:" + cSat + " cExt:"
+				MyUtilities.debugMsg(2, "(" + event.player().tickCount + ") C START cTim:" + cTim + " cSat:" + cSat + " cExt:"
 						+ cExt + " cFod:" + cFod + ".");
 			} else {
-				ServerLevel slevel = (ServerLevel) event.player.level();
-				sRegen = slevel.getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
+				ServerLevel slevel = (ServerLevel) event.player().level();
+				slevel.getGameRules().get(GameRules.NATURAL_HEALTH_REGENERATION);
+
 				sSat = foodData.getSaturationLevel();
 				sFod = foodData.getFoodLevel();
 //					sTim = fs.tickTimer;
@@ -103,7 +106,7 @@ public class PeacefulHealingHandler {
 					e.printStackTrace();
 				}
 
-				Utility.debugMsg(2, "(" + event.player.tickCount + ") S START sTim:" + sTim + " sSat:" + sSat + " sExt:"
+				MyUtilities.debugMsg(2, "(" + event.player().tickCount + ") S START sTim:" + sTim + " sSat:" + sSat + " sExt:"
 						+ sExt + " sFod:" + sFod + ".");
 			}
 
@@ -112,19 +115,23 @@ public class PeacefulHealingHandler {
 
 	@SubscribeEvent
 	public static void onPlayerHealing(PlayerTickEvent.Post event) {
+		
+		Player p = event.player();
+		
 
 		if (MyConfig.isPeacefulHunger()) {
-			FoodData foodData = event.player.getFoodData();
-			Difficulty difficulty = event.player.level().getDifficulty();
+			FoodData foodData = event.player().getFoodData();
+			Difficulty difficulty = event.player().level().getDifficulty();
 
 			if (difficulty == Difficulty.PEACEFUL) {
 				MyConfig.setDebugLevel(0);
-				if (event.side == LogicalSide.CLIENT) {
-					Utility.debugMsg(2, "(" + event.player.tickCount + ") C xENDx cTim:" + cTim + " cSat:" + cSat
+				if (event.side() == LogicalSide.CLIENT) {
+					MyUtilities.debugMsg(2, "(" + event.player().tickCount + ") C xENDx cTim:" + cTim + " cSat:" + cSat
 							+ " cExt:" + cExt + " cFod:" + cFod + ".");
 					foodData.setFoodLevel(cFod);
-				} else {
-					Utility.debugMsg(2, "(" + event.player.tickCount + ") S xENDx sTim:" + sTim + " sSat:" + sSat
+				} else { // logicalSide.SERVER
+					ServerLevel serverLevel = (ServerLevel) p.level();
+					MyUtilities.debugMsg(2, "(" + event.player().tickCount + ") S xENDx sTim:" + sTim + " sSat:" + sSat
 							+ " sExt:" + sExt + " sFod:" + sFod + ".");
 //						fs.foodLevel = sFod;
 
@@ -133,8 +140,8 @@ public class PeacefulHealingHandler {
 					}
 					if (foodData.getFoodLevel() == 0) {
 						if (++sTim > 80) {
-							if (event.player.getHealth() > MyConfig.getMinimumStarvationHealth()) {
-								event.player.hurt(event.player.damageSources().starve(), 1.0F);
+							if (event.player().getHealth() > MyConfig.getMinimumStarvationHealth()) {
+								event.player().hurtServer(serverLevel,event.player().damageSources().starve(), 1.0F);
 							}
 							sTim = 0;
 						}

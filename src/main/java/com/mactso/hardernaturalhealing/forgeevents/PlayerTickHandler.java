@@ -1,12 +1,11 @@
 package com.mactso.hardernaturalhealing.forgeevents;
 
 import com.mactso.hardernaturalhealing.config.MyConfig;
-import com.mactso.hardernaturalhealing.utility.Utility;
+import com.mactso.hardernaturalhealing.utility.MyUtilities;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -18,11 +17,11 @@ public class PlayerTickHandler {
 	@SubscribeEvent
 	public static void playerTickHandler(TickEvent.PlayerTickEvent.Pre event) {
 
-		if (event.player.level() instanceof ServerLevel) {
+		if (event.player().level() instanceof ServerLevel serverLevel) {
 
-			Player p = event.player;
-			Level w = p.level();
-			long gameTime = w.getGameTime();
+			Player p = event.player();
+
+			long gameTime = serverLevel.getGameTime();
 
 			// heal once per second if the player is wounded.
 			if (p.isDeadOrDying() || (gameTime % 20 != 0) || (p.getHealth() >= p.getMaxHealth())) {
@@ -30,7 +29,7 @@ public class PlayerTickHandler {
 			}
 			
 
-			Utility.debugMsg(1, "Handling Player " + p.getName().getString() + ".  Player is wounded.");
+			MyUtilities.debugMsg(1, "Handling Player " + p.getName().getString() + ".  Player is wounded.");
 
 			
 			// if player is hurt, then use optional extra exhaustion if non-zero.
@@ -51,7 +50,7 @@ public class PlayerTickHandler {
 			if (handleStarving) {
 				// HarderNaturalHealing will starve the player every 4 seconds until at the configured minimum health level.
 				if ((gameTime%80 == 0) && (p.getHealth() > MyConfig.getMinimumStarvationHealth())) {
-	                p.hurt(p.damageSources().starve(), 1.0F);
+	                p.hurtServer(serverLevel,p.damageSources().starve(), 1.0F);
 		        }
 			}
 

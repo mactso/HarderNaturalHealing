@@ -12,7 +12,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 
-public class Utility {
+public class MyUtilities {
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	

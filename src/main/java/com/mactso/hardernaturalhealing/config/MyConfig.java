@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.mactso.hardernaturalhealing.Main;
-import com.mactso.hardernaturalhealing.utility.Utility;
+import com.mactso.hardernaturalhealing.utility.MyUtilities;
 
 //import net.minecraft.world.entity.player.Player;
 
@@ -31,7 +31,7 @@ public class MyConfig {
 	}
 
 	public static void pushDebugValue() {
-		Utility.debugMsg(1,"hardernaturalhealing debugLevel:" + MyConfig.debugLevel);
+		MyUtilities.debugMsg(1,"hardernaturalhealing debugLevel:" + MyConfig.debugLevel);
 		COMMON.debugLevel.set(MyConfig.debugLevel);
 	}
 	
