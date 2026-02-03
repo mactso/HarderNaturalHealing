@@ -2,11 +2,9 @@ package com.mactso.hardernaturalhealing.modloader.config;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.mactso.hardernaturalhealing.common.utility.MyUtilities;
 import com.mactso.hardernaturalhealing.modloader.main.Main;
 
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
