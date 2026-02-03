@@ -3,6 +3,7 @@ package com.mactso.hardernaturalhealing.common.logic;
 import com.mactso.hardernaturalhealing.common.utility.MyUtilities;
 import com.mactso.hardernaturalhealing.modloader.config.MyConfig;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 
@@ -42,7 +43,8 @@ public class PlayerHealingLogic {
         if (!shouldHandleStarving(player, dif)) return;
 
         if (gameTime % STARVATION_INTERVAL == 0 && player.getHealth() > MyConfig.getMinimumStarvationHealth()) {
-            player.hurt(player.damageSources().starve(), 1.0F);
+        	ServerLevel serverLevel = player.level();
+			player.hurtServer(serverLevel, serverLevel.damageSources().starve(), 1.0F);
         }
     }
 
