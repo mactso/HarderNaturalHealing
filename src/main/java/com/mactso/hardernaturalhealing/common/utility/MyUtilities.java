@@ -1,9 +1,9 @@
-package com.mactso.hardernaturalhealing.utility;
+package com.mactso.hardernaturalhealing.common.utility;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.mactso.hardernaturalhealing.config.MyConfig;
+import com.mactso.hardernaturalhealing.modloader.config.MyConfig;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -12,7 +12,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-public class Utility {
+public class MyUtilities {
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	

@@ -1,12 +1,26 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
 .gradle
-/build/
-/logs/
-/.classpath
-/.settings/
-/bin/
-/run/
-/build/
-/.project
-/*.launch
-/go16.bat
-/.eclipse
+
+# other
+eclipse
+run
+runs
+run-data
+
+repo
