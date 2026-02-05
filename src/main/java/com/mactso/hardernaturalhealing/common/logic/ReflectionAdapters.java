@@ -12,6 +12,18 @@ public class ReflectionAdapters {
 	public static volatile Field tickTimerField = null;
 	private static volatile Field exhaustionLevelField = null;
 	
+	public static boolean isTickTimerFieldNull(){
+		if (tickTimerField == null)
+			return true;
+		return false;
+	}
+	
+	public static boolean isExhaustionLevelFieldNull(){
+		if (exhaustionLevelField == null)
+			return true;
+		return false;
+	}
+	
 	/**
      * Lazily give access to the FoodData.tickTimer field via reflection.
      * Throws IllegalStateException if the field is unreachable.
@@ -31,13 +43,41 @@ public class ReflectionAdapters {
             );
         }
     }
+    
+
+/*
+* Gets the private FoodData.exhaustionlevel value via reflection 
+*/
+public static int getTickTimerField(FoodData fs) {
+    initTickTimerField();
+    try {
+        return tickTimerField.getInt(fs);
+    } catch (IllegalAccessException e) {
+        throw new IllegalStateException(
+            "HarderNaturalHealing: Unable to get FoodData.tickTimerField", e
+        );
+    }
+}
+/*
+* Sets the private FoodData.exhaustionlevel value via reflection 
+*/
+public static void setTickTimerField(FoodData fs, int value) {
+    initTickTimerField();
+    try {
+    	tickTimerField.setInt(fs, value);
+    } catch (IllegalAccessException e) {
+        throw new IllegalStateException(
+            "HarderNaturalHealing: Unable to set FoodData.tickTimerField", e
+        );
+    }
+}
 
 	/**
      * Lazily give access to the FoodData.exhaustionLevel field via reflection.
      * Throws IllegalStateException if the field is unreachable.
      */
 
-    private static void initExhaustionLevelField() {
+    public static void initExhaustionLevelField() {
         Field f = exhaustionLevelField;
         if (f != null) return;
 

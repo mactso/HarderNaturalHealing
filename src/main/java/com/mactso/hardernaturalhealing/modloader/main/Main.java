@@ -2,7 +2,6 @@ package com.mactso.hardernaturalhealing.modloader.main;
 
 import com.mactso.hardernaturalhealing.modloader.config.MyConfig;
 import com.mactso.hardernaturalhealing.modloader.events.MyCommandsRegisterEvent;
-import com.mactso.hardernaturalhealing.modloader.events.PeacefulHealingEventHandler;
 import com.mactso.hardernaturalhealing.modloader.events.PlayerDeathEventHandler;
 import com.mactso.hardernaturalhealing.modloader.events.PlayerTickHandler;
 import com.mactso.hardernaturalhealing.modloader.events.PlayerWakeupEventHandler;
@@ -28,11 +27,10 @@ public class Main {
 	public Main(IEventBus modEventBus, ModContainer modContainer) {
 
 		NeoForge.EVENT_BUS.register(new MyCommandsRegisterEvent());
-		NeoForge.EVENT_BUS.register(new PeacefulHealingEventHandler());
 		NeoForge.EVENT_BUS.register(new PlayerDeathEventHandler());
 		NeoForge.EVENT_BUS.register(new PlayerTickHandler());
 		NeoForge.EVENT_BUS.register(new PlayerWakeupEventHandler());
-		NeoForge.EVENT_BUS.register(new ServerEvents());
+	    NeoForge.EVENT_BUS.register(new ServerEvents());
 
 		modContainer.registerConfig(ModConfig.Type.COMMON, MyConfig.COMMON_SPEC);
 	}

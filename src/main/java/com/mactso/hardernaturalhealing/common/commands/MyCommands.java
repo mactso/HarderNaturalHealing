@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import com.mactso.hardernaturalhealing.common.utility.MyUtilities;
 import com.mactso.hardernaturalhealing.modloader.config.MyConfig;
+import com.mactso.hardernaturalhealing.modloader.main.Main;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -22,8 +23,7 @@ public class MyCommands {
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 
-		dispatcher.register(Commands.literal("hardernaturalhealing") // root
-				.requires(source -> source.hasPermission(2)) // requires
+		dispatcher.register(Commands.literal(Main.MODID).requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 
 				.then(Commands.literal("help") // help
 						.executes(ctx -> { // executes
