@@ -178,11 +178,68 @@ public class MyConfig {
 		}
 	}
 	
+	// Debugging methods
+	public static int getDebugLevel() {
+		return debugLevel;
+	}
 	
 	public static void setDebugLevel(int debugLevel) {
 		MyConfig.debugLevel = debugLevel;
 	}
 
+	public static boolean isDebug() {
+		if (debugLevel > 0)
+			return true;
+		return false;
+	}
+
+	// Getters
+	public static boolean isPeacefulHunger() {
+		return peacefulHunger;
+	}
+	public static double getHealingPerSecond() {
+		return healingPerSecond;
+	}
+
+	public static int getHealthAfterDeath() {
+		return healthAfterDeath;
+	}
+	
+	public static int getHungerAfterDeath() {
+		return hungerAfterDeath;
+	}
+	
+	public static double getMinimumFoodHealingLevel() {
+		return minimumFoodHealingLevel;
+	}
+
+	public static double getHealingExhaustionCost() {
+		return healingExhaustionCost;
+	}
+
+	public static double getWakeupHealingAmount() {
+		return wakeupHealingAmount;
+	}
+	
+	public static int getAttackHealingDelayTicks() {
+		return attackHealingDelayTicks;
+	}
+	
+	public static double getMaxBonusHitPointTotems() {
+		return maxBonusHitPointTotems;
+	}	
+	
+	public static double getExtraExhaustionWhenHurt() {
+		return extraExhaustionWhenHurt;
+	}
+
+	public static int getMinimumStarvationHealth() {
+		return minimumStarvationHealth;
+	}
+
+	
+	
+	// Setters
 	public static void setHealingPerSecond(double healingPerSecond) {
 	    MyConfig.healingPerSecond = healingPerSecond;
 	    COMMON.healingPerSecond.set(healingPerSecond);
@@ -238,52 +295,5 @@ public class MyConfig {
 	    COMMON.hungerAfterDeath.set(hungerAfterDeath);
 	}
 
-	public static int getDebugLevel() {
-		return debugLevel;
-	}
-
-	public static double getHealingPerSecond() {
-		return healingPerSecond;
-	}
-
-	public static int getHealthAfterDeath() {
-		return healthAfterDeath;
-	}
-	
-	public static int getHungerAfterDeath() {
-		return hungerAfterDeath;
-	}
-	
-	public static double getMinimumFoodHealingLevel() {
-		return minimumFoodHealingLevel;
-	}
-
-	public static double getHealingExhaustionCost() {
-		return healingExhaustionCost;
-	}
-
-	public static double getWakeupHealingAmount() {
-		return wakeupHealingAmount;
-	}
-	
-	public static int getAttackHealingDelayTicks() {
-		return attackHealingDelayTicks;
-	}
-	
-	public static double getMaxBonusHitPointTotems() {
-		return maxBonusHitPointTotems;
-	}	
-	
-	public static double getExtraExhaustionWhenHurt() {
-		return extraExhaustionWhenHurt;
-	}
-
-	public static int getMinimumStarvationHealth() {
-		return minimumStarvationHealth;
-	}
-
-	public static boolean isPeacefulHunger() {
-		return peacefulHunger;
-	}
 
 }
