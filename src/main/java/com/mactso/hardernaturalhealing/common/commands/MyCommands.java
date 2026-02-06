@@ -46,7 +46,7 @@ public class MyCommands {
 						.then(Commands.literal("preset") // literal(preset)
 								.then(Commands.argument("preset", StringArgumentType.word()) // argument(preset)
 										.suggests((ctx, builder) -> { // SuggestionProvider
-											List<String> options = List.of("1", "2", "3", "4", "5", "easy", "normal",
+											List<String> options = List.of("easy", "normal",
 													"harder", "superhard", "wakeup");
 											for (String s : options) {
 												builder.suggest(s); // adds each string as a suggestion
